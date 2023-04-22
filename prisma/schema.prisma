@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id           String     @id
+  name         String     @db.VarChar(255)
+  location     String     @db.VarChar(255)
+  description  String?    @db.Text
+  thumbnailURI String?    @db.VarChar(255)
+  categories   Category[]
+  schedules    Json
+  tickets      Ticket[]
+  orders       Order[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("events")
+}
+
+model Category {
+  id        String   @id
+  name      String   @db.VarChar(100)
+  events     Event[] 
+  eventId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+
+model Ticket {
+  id        String        @id
+  name      String
+  price     Int           @db.UnsignedInt
+  Event     Event?        @relation(fields: [eventId], references: [id])
+  eventId   String?
+  orders    OrderDetail[]
+  stock     Int           @default(0) @db.UnsignedInt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("tickets")
+}
+
+model Customer {
+  id          String   @id
+  name        String?  @db.VarChar(255)
+  email       String   @db.VarChar(255)
+  birthDate   Int? @db.Int
+  phoneNumber String?
+  gender      Gender
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model OrderDetail {
+  id          String   @id
+  Ticket      Ticket?  @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ticketId    String?
+  quantity    Int      @default(1)
+  Order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId     String?
+  name        String?  @db.VarChar(255)
+  email       String   @db.VarChar(255)
+  birthDate   Int? @db.Int
+  phoneNumber String?
+  gender Gender
+
+  @@map("orderDetails")
+}
+
+model Order {
+  id           String        @id
+  status       PaymentStatus @default(INPROCESS)
+  orderDetails OrderDetail[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customerId   String?
+  Event        Event?        @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId      String?
+
+  @@map("orders")
+}
+
+enum Day {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum PaymentStatus {
+  SUCCESS
+  INPROCESS
+  FAILED
+}
