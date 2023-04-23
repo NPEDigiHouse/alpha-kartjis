@@ -3,6 +3,7 @@ import { Order } from "../../models/Order";
 import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
+import { PaymentHelper } from "../../helper/PaymentHelper";
 
 interface OrderDetail {
   orderDetailId: string;
@@ -25,8 +26,24 @@ export class PaymentService {
     this.ticketVerificationModel = new TicketVerification();
   }
 
-  // !deprecated: temp use
   async payOrder(orderId: string) {
+    const paymentHelper = new PaymentHelper();
+    const billResponse = await paymentHelper.createBill();
+
+    const order = await this.orderModel.updateBillIdAndPaymentId(
+      orderId,
+      billResponse.link_id
+    );
+
+    if (!order) {
+      throw new NotFoundError("order's not found");
+    }
+
+    return { billLink: billResponse.link_url };
+  }
+
+  // !deprecated: temp use
+  async payOrderDeprecated(orderId: string) {
     const order = await this.orderModel.changePaymentStatusById(orderId);
 
     if (!order) {

@@ -7,6 +7,7 @@ import { CategoryRouter } from "./api/categories/router";
 import { OrderRouter } from "./api/orders/router";
 import { OrderDetailRouter } from "./api/orderDetails/router";
 import { TicketVerificationRouter } from "./api/ticketVerification/router";
+import { CallbackRouter } from "./api/callback/router";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ class Server {
     // * static file
     this.app.use("/uploaded-file", express.static("media"));
     // * api base route
+    this.app.use("/", new CallbackRouter().register());
     this.app.use("/api", new EventRouter().register());
     this.app.use("/api", new CategoryRouter().register());
     this.app.use("/api", new OrderRouter().register());

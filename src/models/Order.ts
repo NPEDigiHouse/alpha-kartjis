@@ -4,6 +4,37 @@ import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
 export class Order {
+  async changePaymentStatusByBillId(billId: number, status: boolean) {
+    try {
+      return await db.order.update({
+        where: { billId },
+        data: { status: status ? "SUCCESS" : "FAILED" },
+        include: { orderDetails: true },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new BadRequestError(error.message);
+      } else if (error instanceof Error) {
+        throw new InternalServerError(error.message);
+      }
+    }
+  }
+
+  async updateBillIdAndPaymentId(orderId: string, link_id: number) {
+    try {
+      return await db.order.update({
+        where: { id: orderId },
+        data: { billId: link_id },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new BadRequestError(error.message);
+      } else if (error instanceof Error) {
+        throw new InternalServerError(error.message);
+      }
+    }
+  }
+
   async changePaymentStatusById(orderId: string) {
     try {
       return await db.order.update({
