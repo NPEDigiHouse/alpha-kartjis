@@ -100,7 +100,7 @@ model TicketVerification {
   id            String      @id
   hash          String      @unique
   isScanned     Boolean     @default(false)
-  OrderDetail   OrderDetail @relation(fields: [orderDetailId], references: [id])
+  OrderDetail   OrderDetail @relation(fields: [orderDetailId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   orderDetailId String      @unique
