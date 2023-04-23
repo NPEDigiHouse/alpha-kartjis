@@ -63,7 +63,7 @@ export class TicketPurchasemmentService {
     for (let i = 0; i < payload.tickets.length; i++) {
       await this.ticketModel.reduceTicketBasedOnQuantityBought(
         payload.tickets[i].ticketId,
-        payload.tickets[0].quantity
+        1
       );
     }
 
