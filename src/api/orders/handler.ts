@@ -21,11 +21,9 @@ export class OrderHandler {
     try {
       const { orderId } = req.params;
 
-      await this.paymentService.payOrder(orderId);
+      const bill = await this.paymentService.payOrder(orderId);
 
-      return res.json(
-        createResponse(constants.SUCCESS_RESPONSE_MESSAGE, "successfully paid")
-      );
+      return res.json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, bill));
     } catch (error) {
       return next(error);
     }
