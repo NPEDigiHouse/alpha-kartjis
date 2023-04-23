@@ -29,14 +29,13 @@ model Event {
 model Category {
   id        String   @id
   name      String   @db.VarChar(100)
-  events     Event[] 
+  events    Event[]
   eventId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("categories")
 }
-
 
 model Ticket {
   id        String        @id
@@ -56,7 +55,7 @@ model Customer {
   id          String   @id
   name        String?  @db.VarChar(255)
   email       String   @db.VarChar(255)
-  birthDate   Int? @db.Int
+  birthDate   Int?     @db.Int
   phoneNumber String?
   gender      Gender
   orders      Order[]
@@ -67,17 +66,18 @@ model Customer {
 }
 
 model OrderDetail {
-  id          String   @id
-  Ticket      Ticket?  @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  ticketId    String?
-  quantity    Int      @default(1)
-  Order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderId     String?
-  name        String?  @db.VarChar(255)
-  email       String   @db.VarChar(255)
-  birthDate   Int? @db.Int
-  phoneNumber String?
-  gender Gender
+  id                 String              @id
+  Ticket             Ticket?             @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ticketId           String?
+  quantity           Int                 @default(1)
+  Order              Order?              @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId            String?
+  name               String?             @db.VarChar(255)
+  email              String              @db.VarChar(255)
+  birthDate          Int?                @db.Int
+  phoneNumber        String?
+  gender             Gender
+  TicketVerification TicketVerification?
 
   @@map("orderDetails")
 }
@@ -94,6 +94,16 @@ model Order {
   eventId      String?
 
   @@map("orders")
+}
+
+model TicketVerification {
+  id            String      @id
+  hash          String      @unique
+  isScanned     Boolean     @default(false)
+  OrderDetail   OrderDetail @relation(fields: [orderDetailId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  orderDetailId String      @unique
 }
 
 enum Day {

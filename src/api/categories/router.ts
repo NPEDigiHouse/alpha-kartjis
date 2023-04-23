@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { BaseRouter } from "../../routers/BaseRouter";
 import { CategoryHandler } from "./handler";
 
 export class CategoryRouter {

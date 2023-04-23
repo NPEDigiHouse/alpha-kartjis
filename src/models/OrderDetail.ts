@@ -39,4 +39,14 @@ export class OrderDetail {
       }
     }
   }
+
+  async getOrderDetailById(orderDetailId: string) {
+    return await db.orderDetail.findUnique({
+      where: { id: orderDetailId },
+      include: {
+        Order: { include: { Event: true } },
+        TicketVerification: true,
+      },
+    });
+  }
 }

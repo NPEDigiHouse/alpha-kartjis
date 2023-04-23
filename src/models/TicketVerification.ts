@@ -3,15 +3,12 @@ import { BadRequestError } from "../exceptions/BadRequestError";
 import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
-export class Order {
-  async changePaymentStatusById(orderId: string) {
+export class TicketVerification {
+  async scanTicketVerification(id: string) {
     try {
-      return await db.order.update({
-        where: { id: orderId },
-        data: { status: "SUCCESS" },
-        include: {
-          orderDetails: true,
-        },
+      return await db.ticketVerification.update({
+        where: { id },
+        data: { isScanned: true },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -22,13 +19,17 @@ export class Order {
     }
   }
 
-  async addNewOrder(eventId: string, orderId: string, customerId?: string) {
+  async getTicketVerificationByHash(hash: string) {
+    return await db.ticketVerification.findUnique({ where: { hash } });
+  }
+
+  async addNewVerification(id: string, hash: string, orderDetailId: string) {
     try {
-      return await db.order.create({
+      return await db.ticketVerification.create({
         data: {
-          id: orderId,
-          customerId,
-          eventId,
+          hash,
+          id,
+          orderDetailId,
         },
       });
     } catch (error) {
@@ -38,16 +39,5 @@ export class Order {
         throw new InternalServerError(error.message);
       }
     }
-  }
-
-  async getOrderById(orderId: string) {
-    return await db.order.findUnique({
-      where: { id: orderId },
-      include: {
-        Event: true,
-        orderDetails: true,
-        Customer: true,
-      },
-    });
   }
 }

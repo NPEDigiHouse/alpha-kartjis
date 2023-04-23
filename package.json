@@ -4,7 +4,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "migrate": "prisma migrate dev --name",
-    "start::dev": "ts-node ./src/loader/swagger.ts && nodemon ./src/index.ts",
+    "start::dev": "nodemon ./src/index.ts",
     "build": "rimraf ./dist && tsc",
     "start": "node dist/index.js"
   },
