@@ -76,7 +76,7 @@ export class Order {
       where: { id: orderId },
       include: {
         Event: true,
-        orderDetails: true,
+        orderDetails: { include: { Ticket: true } },
         Customer: true,
       },
     });

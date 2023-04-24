@@ -8,18 +8,49 @@ interface IOrderDetailDetailDTO {
   eventThumbnailURI?: string;
   schedules: IEventSchedule[];
   orderDate: Date;
-  orderDetails: OrderDetail[];
+  orderDetails: IOrderDetail[];
   paymentStatus: "INPROCESS" | "SUCCESS" | "FAILED";
+}
+
+interface IOrderDetail {
+  id: string;
+  ticketId?: string;
+  quantity?: number;
+  orderId?: string;
+  ticketName?: string;
+  price?: number;
 }
 
 export const OrderDetailMapper = (
   data: Order & {
-    Event: Event | null;
+    orderDetails: (OrderDetail & {
+      Ticket: Ticket | null;
+    })[];
     Customer: Customer | null;
-    orderDetails: OrderDetail[];
+    Event: Event | null;
   }
 ) => {
   const schedules = JSON.parse(data.Event?.schedules?.toString() ?? "");
+  const orderDetails: IOrderDetail[] = [];
+
+  for (let i = 0; i < data.orderDetails.length; i++) {
+    let duplicate = false;
+    for (let i = 0; i < orderDetails.length; i++) {
+      duplicate = data.orderDetails[i].ticketId === orderDetails[i].ticketId;
+    }
+
+    if (!duplicate) {
+      orderDetails.push({
+        id: data.orderDetails[i].id,
+        orderId: data.orderDetails[i].orderId ?? undefined,
+        price: data.orderDetails[i].Ticket?.price,
+        quantity: data.orderDetails[i].quantity,
+        ticketId: data.orderDetails[i].ticketId ?? undefined,
+        ticketName: data.orderDetails[i].Ticket?.name,
+      });
+    }
+  }
+
   return {
     id: data.id,
     eventName: data.Event?.name,
@@ -27,7 +58,7 @@ export const OrderDetailMapper = (
     eventThumbnailURI: data.Event?.thumbnailURI,
     orderDate: data.createdAt,
     paymentStatus: data.status,
-    orderDetails: data.orderDetails,
+    orderDetails,
     schedules,
   } as IOrderDetailDetailDTO;
 };
