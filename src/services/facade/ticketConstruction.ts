@@ -3,6 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
 import { EmailHelper } from "../../helper/EmailHelper";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface IOrderDetail {
   orderDetailId: string;
@@ -50,9 +53,11 @@ export class TicketConstruction {
 
       const clientUrl = `https://${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}}`;
       const emailBody = {
+        from: process.env.KARTJIS_MAIL,
         to: orderDetail.email,
         subject: "Your Ticket",
-        text: `<a href="${clientUrl}">${clientUrl}</a>`,
+        html: `<a href="${clientUrl}">${clientUrl}</a>`,
+        text: "your ticket",
       };
       this.emailHelper.sendEmail(emailBody);
     }

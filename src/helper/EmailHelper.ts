@@ -8,13 +8,13 @@ interface IEmailBody {
   to: string;
   subject: string;
   text: string;
+  html: string;
 }
 
 export class EmailHelper {
   transporter: nodemailer.Transporter;
   constructor() {
     // Create a transport object using SMTP for Gmail
-
     this.transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
