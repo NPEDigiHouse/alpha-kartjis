@@ -21,6 +21,7 @@ interface IEventDetailDTO {
   schedules: IEventSchedule[];
   description?: string;
   tickets?: Ticket[];
+  quota: number;
 }
 
 export const ListEventMapper = (
@@ -54,6 +55,11 @@ export const EventDetailMapper = (
   }
 ) => {
   const schedules = JSON.parse(data.schedules?.toString() ?? "");
+  let quota = 0;
+
+  for (let i = 0; i < data.tickets.length; i++) {
+    quota += data.tickets[i].stock;
+  }
   return {
     id: data.id,
     location: data.location,
@@ -67,5 +73,6 @@ export const EventDetailMapper = (
       stock: ticket.stock,
     })),
     schedules,
+    quota,
   } as IEventDetailDTO;
 };
