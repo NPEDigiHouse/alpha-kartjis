@@ -8,7 +8,7 @@ import { TicketPayloadValidator } from "../../validator/tickets";
 import { TicketService } from "../../services/database/ticket";
 import { IPutTicketPurchasementPayload } from "../../utils/interface/misc/ticketEvent";
 import { TicketPurchasementValidator } from "../../validator/misc/ticketEvent";
-import { TicketPurchasemmentService } from "../../services/database/ticketPurchasement";
+import { TicketPurchasemmentService } from "../../services/facade/ticketPurchasement";
 
 export class EventHandler {
   private eventService: EventService;
