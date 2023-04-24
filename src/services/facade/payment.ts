@@ -1,9 +1,8 @@
 import { NotFoundError } from "../../exceptions/NotFoundError";
 import { Order } from "../../models/Order";
-import { v4 as uuidv4 } from "uuid";
-import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
 import { PaymentHelper } from "../../helper/PaymentHelper";
+import { TicketConstruction } from "./ticketConstruction";
 
 interface OrderDetail {
   orderDetailId: string;
@@ -51,30 +50,10 @@ export class PaymentService {
       throw new NotFoundError("order's not found");
     }
 
-    for (let i = 0; i < order.orderDetails.length; i++) {
-      const id = uuidv4();
-      const orderDetail = order.orderDetails[i];
-      const data = {
-        orderDetailId: orderDetail.id,
-        timestamp: Date.now(),
-        birthDate: orderDetail.birthDate,
-        gender: orderDetail.gender,
-        invoice: orderDetail.orderId,
-        phoneNumber: orderDetail.phoneNumber,
-        name: orderDetail.name,
-        ticketId: orderDetail.ticketId,
-        orderDate: order.createdAt,
-      } as OrderDetail;
-      const hash = hashData(JSON.stringify(data));
-      console.log(data);
+    //! this object is only for testing so I make it local object
+    const ticketConstruction = new TicketConstruction();
+    await ticketConstruction.composeTicket(order);
 
-      console.log(hash);
-
-      await this.ticketVerificationModel.addNewVerification(
-        id,
-        hash,
-        orderDetail.id
-      );
-    }
+    return { billLink: "https://random.site" };
   }
 }

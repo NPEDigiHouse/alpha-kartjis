@@ -21,7 +21,7 @@ export class OrderHandler {
     try {
       const { orderId } = req.params;
 
-      const bill = await this.paymentService.payOrder(orderId);
+      const bill = await this.paymentService.payOrderDeprecated(orderId);
 
       return res.json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, bill));
     } catch (error) {
