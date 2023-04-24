@@ -51,7 +51,7 @@ export class TicketConstruction {
         orderDetail.id
       );
 
-      const clientUrl = `https://${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}`;
+      const clientUrl = `${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}`;
       const emailBody = {
         from: process.env.KARTJIS_MAIL,
         to: orderDetail.email,
