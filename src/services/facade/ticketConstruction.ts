@@ -1,11 +1,10 @@
-import { NotFoundError } from "../../exceptions/NotFoundError";
-import { Order } from "../../models/Order";
+import { Order, OrderDetail } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
-import { PaymentHelper } from "../../helper/PaymentHelper";
+import { EmailHelper } from "../../helper/EmailHelper";
 
-interface OrderDetail {
+interface IOrderDetail {
   orderDetailId: string;
   name: string;
   birthDate: number;
@@ -17,40 +16,17 @@ interface OrderDetail {
   timestamp: number;
 }
 
-export class PaymentService {
-  orderModel: Order;
+export class TicketConstruction {
   ticketVerificationModel: TicketVerification;
+  emailHelper: EmailHelper;
 
   constructor() {
-    this.orderModel = new Order();
     this.ticketVerificationModel = new TicketVerification();
+    this.emailHelper = new EmailHelper();
   }
 
-  async payOrder(orderId: string) {
-    const paymentHelper = new PaymentHelper();
-    const billResponse = await paymentHelper.createBill();
-
-    const order = await this.orderModel.updateBillIdAndPaymentId(
-      orderId,
-      billResponse.link_id
-    );
-
-    if (!order) {
-      throw new NotFoundError("order's not found");
-    }
-
-    return { billLink: billResponse.link_url };
-  }
-
-  // !deprecated: temp use
-  async payOrderDeprecated(orderId: string) {
-    const order = await this.orderModel.changePaymentStatusById(orderId);
-
-    if (!order) {
-      throw new NotFoundError("order's not found");
-    }
-
-    for (let i = 0; i < order.orderDetails.length; i++) {
+  async composeTicket(order: Order & { orderDetails: OrderDetail[] | [] }) {
+    for (let i = 0; i < order.orderDetails?.length; i++) {
       const id = uuidv4();
       const orderDetail = order.orderDetails[i];
       const data = {
@@ -63,17 +39,22 @@ export class PaymentService {
         name: orderDetail.name,
         ticketId: orderDetail.ticketId,
         orderDate: order.createdAt,
-      } as OrderDetail;
+      } as IOrderDetail;
       const hash = hashData(JSON.stringify(data));
-      console.log(data);
-
-      console.log(hash);
 
       await this.ticketVerificationModel.addNewVerification(
         id,
         hash,
         orderDetail.id
       );
+
+      const clientUrl = `https://${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}}`;
+      const emailBody = {
+        to: orderDetail.email,
+        subject: "Your Ticket",
+        text: `<a href="${clientUrl}">${clientUrl}</a>`,
+      };
+      this.emailHelper.sendEmail(emailBody);
     }
   }
 }

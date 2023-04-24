@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { OrderService } from "../../services/database/order";
 import { constants, createResponse } from "../../utils";
-import { PaymentService } from "../../services/database/payment";
+import { PaymentService } from "../../services/facade/payment";
 
 export class OrderHandler {
   orderService: OrderService;
