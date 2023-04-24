@@ -19,6 +19,7 @@ interface IOrderDetail {
   orderId?: string;
   ticketName?: string;
   price?: number;
+  email: string;
 }
 
 export const OrderDetailMapper = (
@@ -50,6 +51,7 @@ export const OrderDetailMapper = (
         quantity: data.orderDetails[i].quantity,
         ticketId: data.orderDetails[i].ticketId ?? undefined,
         ticketName: data.orderDetails[i].Ticket?.name,
+        email: data.orderDetails[i].email,
       });
     }
   }

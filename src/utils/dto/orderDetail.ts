@@ -53,7 +53,7 @@ export const OrderDetailDetailMapper = (
 
   for (let i = 0; i < orderDetailDb.length; i++) {
     let duplicate = false;
-    for (let j = 0; j < orderDetails.length; i++) {
+    for (let j = 0; j < orderDetails.length; j++) {
       duplicate = orderDetailDb[i].ticketId === orderDetails[j].ticketId;
       if (duplicate) {
         break;
