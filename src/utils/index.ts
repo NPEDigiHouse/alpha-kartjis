@@ -19,7 +19,7 @@ export const hashData = (data: string) => {
   const salt = process.env.HASHED_SALT;
 
   // Create a SHA256 hash object
-  const hash = crypto.createHash("sha256");
+  const hash = crypto.createHash("md5");
 
   // Combine the salt and data
   const saltedData = salt + data;
