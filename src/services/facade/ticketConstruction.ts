@@ -4,6 +4,8 @@ import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
 import { EmailHelper } from "../../helper/EmailHelper";
 import dotenv from "dotenv";
+import pug from 'pug';
+import path from "path";
 
 dotenv.config();
 
@@ -56,8 +58,16 @@ export class TicketConstruction {
         from: process.env.KARTJIS_MAIL,
         to: orderDetail.email,
         subject: "Your Ticket",
-        html: `<a href="${clientUrl}">${clientUrl}</a>`,
-        text: "your ticket",
+        // html: `<a href="${clientUrl}">${clientUrl}</a>`,
+        html: pug.compileFile(path.join(__dirname,'..','..','..','views/email.pug'))({
+          name: "Sony",
+          ticketName: "Sound of the South",
+          orderNumber: "Mx489s",
+          orderDate: "20 November 2021 17.30",
+          paymentMethod: "QRIS",
+          redirectLink: clientUrl
+        }),
+        text: "",
       };
       this.emailHelper.sendEmail(emailBody);
     }
