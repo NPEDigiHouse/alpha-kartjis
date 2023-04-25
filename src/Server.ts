@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 import { ErrorHandler } from "./middleware/ErrorHandler";
 import { EventRouter } from "./api/events/router";
 import { CategoryRouter } from "./api/categories/router";
@@ -24,7 +25,10 @@ class Server {
     this.app.use(cors());
     this.app.use(express.json());
     // * static file
-    this.app.use("/uploaded-file", express.static("media"));
+    this.app.use(
+      "/uploaded-file",
+      express.static(path.join(__dirname, "..", "media"))
+    );
     // * api base route
     this.app.use("/", new CallbackRouter().register());
     this.app.use("/api", new EventRouter().register());

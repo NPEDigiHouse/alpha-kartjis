@@ -1,5 +1,8 @@
 import db from "../database";
 import { v4 as uuidv4 } from "uuid";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const seedingDatabase = async () => {
   await db.ticketVerification.deleteMany({});
@@ -20,12 +23,15 @@ const seedingDatabase = async () => {
   const event = await db.event.create({
     data: {
       id: uuidv4(),
-      name: "konser blackpink",
-      location: "panlos",
+      name: "ROAD TO Suara Dari Selatan",
+      location: "LAPANGAN PARKIR LOT AMBALAT TRANS STUDIO MALL MAKASSAR",
       schedules: JSON.stringify([
-        { startTime: 1682162511, endTime: 1682162511 },
+        { startTime: 1690126088, endTime: 1690126088 },
       ]),
       categories: { connect: { id: category.id } },
+      thumbnailURI: `localhost:${process.env.PORT}/uploaded-file/FULL.jpg`,
+      description:
+        "Suara dari selatan adalah selebrasi pertunjukan musik Indonesia yang ada di makasar! yang dimana diselenggarakan oleh Hawaii Indonesia. Acara musik ini akan hadir selama 1 hari dengan konsep Road to pada tanggal 20 JULI 2023 bertempat di Lap Parking Lot Ambalat Trans Studio Mall Makasar! Menampilkan dua LEGENDA musik indonesia.",
     },
   });
 
@@ -33,23 +39,9 @@ const seedingDatabase = async () => {
     data: [
       {
         id: uuidv4(),
-        name: "PRESALE",
-        price: 100000,
-        stock: 100,
-        eventId: event.id,
-      },
-      {
-        id: uuidv4(),
-        name: "VIP",
-        price: 1000000,
-        stock: 25,
-        eventId: event.id,
-      },
-      {
-        id: uuidv4(),
         name: "REGULAR",
-        price: 450000,
-        stock: 1000,
+        price: 180000,
+        stock: 5000,
         eventId: event.id,
       },
     ],
