@@ -28,18 +28,29 @@ export class PaymentService {
   }
 
   async payOrder(orderId: string) {
-    const billResponse = await this.paymentHelper.createBill();
+    const order = await this.orderModel.getOrderById(orderId);
+    let amount = 0;
+    if (order) {
+      for (let i = 0; i < order.orderDetails.length; i++) {
+        const orderDetail = order.orderDetails[i];
+        if (orderDetail.Ticket) {
+          amount += orderDetail.quantity * orderDetail.Ticket?.price;
+        }
+      }
+    }
 
-    const order = await this.orderModel.updateBillIdAndPaymentId(
+    const billResponse = await this.paymentHelper.createBill(orderId, amount);
+
+    const orderUpdated = await this.orderModel.updateBillIdAndPaymentId(
       orderId,
       billResponse.link_id
     );
 
-    if (!order) {
+    if (!orderUpdated) {
       throw new NotFoundError("order's not found");
     }
 
-    return { billLink: billResponse.link_url };
+    return { billLink: billResponse.redirect_url, token: billResponse.token };
   }
 
   // !deprecated: temp use

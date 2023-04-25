@@ -37,12 +37,12 @@ export class TicketPurchasemmentService {
       }
     }
 
-    const customerId = uuidv4();
+    let customer = null;
+    if (payload.customerProfile) {
+      const customerId = uuidv4();
 
-    const customer = await this.customerModel.registerCustomer(
-      customerId,
-      payload
-    );
+      customer = await this.customerModel.registerCustomer(customerId, payload);
+    }
 
     const orderId = uuidv4();
     const order = await this.orderModel.addNewOrder(

@@ -21,6 +21,7 @@ interface IOrderDetailDetailDTO {
   gender: "FEMALE" | "MALE";
   hash?: string;
   barcodeURI?: string;
+  ticketName?: string;
   orderDetails?: IOrderDetail[];
 }
 
@@ -44,12 +45,24 @@ export const OrderDetailDetailMapper = (
         })
       | null;
     TicketVerification: TicketVerification | null;
+    Ticket: Ticket | null;
   }
 ) => {
   const schedules = JSON.parse(data.Order?.Event?.schedules?.toString() ?? "");
 
   const orderDetails: IOrderDetail[] = [];
   const orderDetailDb = data.Order?.orderDetails ?? [];
+
+  if (orderDetailDb[0]) {
+    orderDetails.push({
+      id: orderDetailDb[0].id,
+      orderId: orderDetailDb[0].orderId ?? undefined,
+      price: orderDetailDb[0].Ticket?.price,
+      quantity: orderDetailDb[0].quantity,
+      ticketId: orderDetailDb[0].ticketId ?? undefined,
+      ticketName: orderDetailDb[0].Ticket?.name,
+    });
+  }
 
   for (let i = 0; i < orderDetailDb.length; i++) {
     let duplicate = false;
@@ -84,7 +97,8 @@ export const OrderDetailDetailMapper = (
     name: data.name,
     hash: data.TicketVerification?.hash,
     barcodeURI: `${process.env.HOST}:${process.env.PORT}/api/ticket-verifications/${data.TicketVerification?.hash}`,
-    orderDetails,
+    ticketName: data.Ticket?.name,
     schedules,
+    orderDetails,
   } as IOrderDetailDetailDTO;
 };
