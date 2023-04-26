@@ -65,6 +65,6 @@ export class PaymentService {
     const ticketConstruction = new TicketConstruction();
     await ticketConstruction.composeTicket(order);
 
-    return { billLink: "https://random.site" };
+    return { billLink: "https://random.site", token: "asfjotuasdf0127491" };
   }
 }
