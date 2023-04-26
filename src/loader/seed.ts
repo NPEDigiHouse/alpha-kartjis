@@ -40,7 +40,7 @@ const seedingDatabase = async () => {
       {
         id: uuidv4(),
         name: "REGULAR",
-        price: 1000,
+        price: 100,
         stock: 5000,
         eventId: event.id,
       },
