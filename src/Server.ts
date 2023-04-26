@@ -31,11 +31,11 @@ class Server {
     this.app.use(express.json());
     // * static file
     this.app.use(
-      "/uploaded-file",
+      "/api/uploaded-file",
       express.static(process.env.STATIC_URL ?? "media")
     );
     // * api base route
-    this.app.use("/", new CallbackRouter().register());
+    this.app.use("/api", new CallbackRouter().register());
     this.app.use("/api", new EventRouter().register());
     this.app.use("/api", new CategoryRouter().register());
     this.app.use("/api", new OrderRouter().register());
