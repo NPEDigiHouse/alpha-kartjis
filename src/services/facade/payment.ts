@@ -55,7 +55,7 @@ export class PaymentService {
 
   // !deprecated: temp use
   async payOrderDeprecated(orderId: string) {
-    const order = await this.orderModel.changePaymentStatusById(orderId);
+    const order = await this.orderModel.changePaymentStatusById(orderId, true);
 
     if (!order) {
       throw new NotFoundError("order's not found");

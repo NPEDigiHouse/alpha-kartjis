@@ -35,11 +35,11 @@ export class Order {
     }
   }
 
-  async changePaymentStatusById(orderId: string) {
+  async changePaymentStatusById(orderId: string, status: boolean) {
     try {
       return await db.order.update({
         where: { id: orderId },
-        data: { status: "SUCCESS" },
+        data: { status: status ? "SUCCESS" : "FAILED" },
         include: {
           orderDetails: { include: { Ticket: true } },
         },
