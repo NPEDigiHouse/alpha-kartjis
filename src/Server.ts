@@ -23,10 +23,7 @@ class Server {
     // Initialize Swagger with options
     this.app.disable("x-powered-by");
     this.app.use(function (req, res, next) {
-      res.setHeader(
-        "Content-Security-Policy",
-        "upgrade-insecure-requestsutf-8"
-      );
+      res.setHeader("Content-Security-Policy", "upgrade-insecure-requests");
       next();
     });
 
