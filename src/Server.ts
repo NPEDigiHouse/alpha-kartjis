@@ -22,6 +22,14 @@ class Server {
   config() {
     // Initialize Swagger with options
     this.app.disable("x-powered-by");
+    this.app.use(function (req, res, next) {
+      res.setHeader(
+        "Content-Security-Policy",
+        "upgrade-insecure-requestsutf-8"
+      );
+      next();
+    });
+
     this.app.use(cors());
     this.app.use(express.json());
     // * static file
