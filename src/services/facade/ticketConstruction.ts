@@ -49,7 +49,11 @@ export class TicketConstruction {
         ticketId: orderDetail.ticketId,
         orderDate: order.createdAt,
       } as IOrderDetail;
-      const hash = hashData(JSON.stringify(data));
+      const hash = hashData(
+        JSON.stringify(data),
+        "md5",
+        process.env.HASHED_SALT
+      );
 
       await this.ticketVerificationModel.addNewVerification(
         id,

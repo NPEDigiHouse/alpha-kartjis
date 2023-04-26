@@ -14,15 +14,12 @@ export const createResponse = (
   return { status, message: data };
 };
 
-export const hashData = (data: string) => {
-  // Generate a random salt
-  const salt = process.env.HASHED_SALT;
-
+export const hashData = (data: string, algorithm: string, salt?: string) => {
   // Create a SHA256 hash object
-  const hash = crypto.createHash("md5");
+  const hash = crypto.createHash(algorithm);
 
   // Combine the salt and data
-  const saltedData = salt + data;
+  const saltedData = (salt ?? "") + data;
 
   // Update the hash object with the salted data
   hash.update(saltedData, "utf8");

@@ -1,5 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import { config } from "../config";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ export class PaymentHelper {
 
   async createBill(orderId: string, amount: number) {
     const response = await axios.post(
-      process.env.MIDTRANS_SNAP_URL ?? "",
+      config.config().MIDTRANS_SNAP_URL ?? "",
       {
         transaction_details: {
           order_id: orderId,
@@ -19,7 +20,7 @@ export class PaymentHelper {
       },
       {
         auth: {
-          username: process.env.MIDTRANS_SERVER_KEY ?? "",
+          username: config.config().MIDTRANS_SERVER_KEY ?? "",
           password: "",
         },
       }

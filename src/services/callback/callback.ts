@@ -1,7 +1,12 @@
+import { config } from "../../config";
 import { BadRequestError } from "../../exceptions/BadRequestError";
 import { Order } from "../../models/Order";
 import { TicketVerification } from "../../models/TicketVerification";
+import { hashData } from "../../utils";
 import { TicketConstruction } from "../facade/ticketConstruction";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export class CallbackService {
   orderModel: Order;
@@ -19,6 +24,18 @@ export class CallbackService {
       if (data.fraud_status !== "accept") {
         throw new BadRequestError("payment contains fraud content");
       }
+    }
+
+    const challengedSignatureKey = hashData(
+      data.order_id +
+        data.status_code +
+        data.gross_amount +
+        config.config().MIDTRANS_SERVER_KEY,
+      "sha512"
+    );
+
+    if (challengedSignatureKey !== data.signature_key) {
+      throw new BadRequestError("transaction is not authentic");
     }
 
     if (
