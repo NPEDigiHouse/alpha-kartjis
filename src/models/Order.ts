@@ -42,6 +42,7 @@ export class Order {
         data: { status: status ? "SUCCESS" : "FAILED" },
         include: {
           orderDetails: { include: { Ticket: true } },
+          Event: true,
         },
       });
     } catch (error) {

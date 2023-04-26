@@ -63,7 +63,7 @@ export class PaymentService {
 
     //! this object is only for testing so I make it local object
     const ticketConstruction = new TicketConstruction();
-    await ticketConstruction.composeTicket(order);
+    await ticketConstruction.composeTicket(order, "other");
 
     return { billLink: "https://random.site" };
   }

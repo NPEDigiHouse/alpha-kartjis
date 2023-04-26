@@ -1,4 +1,4 @@
-import { Order, OrderDetail, Ticket } from "@prisma/client";
+import { Event, Order, OrderDetail, Ticket } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
@@ -6,6 +6,7 @@ import { EmailHelper } from "../../helper/EmailHelper";
 import dotenv from "dotenv";
 import pug from "pug";
 import path from "path";
+import { config } from "../../config";
 
 dotenv.config();
 
@@ -32,8 +33,10 @@ export class TicketConstruction {
 
   async composeTicket(
     order: Order & {
+      Event: Event | null;
       orderDetails: (OrderDetail & { Ticket: Ticket | null })[] | [];
-    }
+    },
+    paymentType: string
   ) {
     for (let i = 0; i < order.orderDetails?.length; i++) {
       const id = uuidv4();
@@ -63,18 +66,18 @@ export class TicketConstruction {
 
       const clientUrl = `${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}`;
       const emailBody = {
-        from: process.env.KARTJIS_MAIL,
+        from: config.config().KARTJIS_MAIL,
         to: orderDetail.email,
-        subject: "Your Ticket",
+        subject: `E-Tiket [${order.Event?.name}] - ${orderDetail.name}`,
         // html: `<a href="${clientUrl}">${clientUrl}</a>`,
         html: pug.compileFile(
           path.join(__dirname, "..", "..", "..", "views/email.pug")
         )({
           name: orderDetail.name,
-          ticketName: orderDetail.Ticket?.name,
+          ticketName: order.Event?.name,
           orderNumber: order.id,
           orderDate: new Date(order.createdAt),
-          paymentMethod: "QRIS",
+          paymentMethod: paymentType,
           redirectLink: clientUrl,
         }),
         text: "",

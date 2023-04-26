@@ -48,7 +48,7 @@ export class CallbackService {
       );
 
       if (order) {
-        await this.ticketConstruction.composeTicket(order);
+        await this.ticketConstruction.composeTicket(order, data.payment_type);
       }
     } else if (
       data.transaction_status === "deny" ||

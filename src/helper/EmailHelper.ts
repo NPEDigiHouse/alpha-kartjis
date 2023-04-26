@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import { config } from "../config";
 
 dotenv.config();
 
@@ -18,8 +19,8 @@ export class EmailHelper {
     this.transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.KARTJIS_MAIL, // Your Gmail email address
-        pass: process.env.KARTJIS_PASSWORD, // Your Gmail email password
+        user: config.config().KARTJIS_MAIL, // Your Gmail email address
+        pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
       },
     });
   }
