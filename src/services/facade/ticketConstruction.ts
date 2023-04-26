@@ -1,10 +1,10 @@
-import { Order, OrderDetail } from "@prisma/client";
+import { Order, OrderDetail, Ticket } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
 import { EmailHelper } from "../../helper/EmailHelper";
 import dotenv from "dotenv";
-import pug from 'pug';
+import pug from "pug";
 import path from "path";
 
 dotenv.config();
@@ -30,7 +30,11 @@ export class TicketConstruction {
     this.emailHelper = new EmailHelper();
   }
 
-  async composeTicket(order: Order & { orderDetails: OrderDetail[] | [] }) {
+  async composeTicket(
+    order: Order & {
+      orderDetails: (OrderDetail & { Ticket: Ticket | null })[] | [];
+    }
+  ) {
     for (let i = 0; i < order.orderDetails?.length; i++) {
       const id = uuidv4();
       const orderDetail = order.orderDetails[i];
@@ -59,13 +63,15 @@ export class TicketConstruction {
         to: orderDetail.email,
         subject: "Your Ticket",
         // html: `<a href="${clientUrl}">${clientUrl}</a>`,
-        html: pug.compileFile(path.join(__dirname,'..','..','..','views/email.pug'))({
-          name: "Sony",
-          ticketName: "Sound of the South",
-          orderNumber: "Mx489s",
-          orderDate: "20 November 2021 17.30",
+        html: pug.compileFile(
+          path.join(__dirname, "..", "..", "..", "views/email.pug")
+        )({
+          name: orderDetail.name,
+          ticketName: orderDetail.Ticket?.name,
+          orderNumber: order.id,
+          orderDate: new Date(order.createdAt),
           paymentMethod: "QRIS",
-          redirectLink: clientUrl
+          redirectLink: clientUrl,
         }),
         text: "",
       };
