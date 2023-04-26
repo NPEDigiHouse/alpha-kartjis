@@ -45,9 +45,13 @@ export class OrderDetail {
       where: { id: orderDetailId },
       include: {
         Order: {
-          include: { Event: true, orderDetails: { include: { Ticket: true } } },
+          include: {
+            Event: true,
+            orderDetails: { include: { Ticket: true } },
+          },
         },
         TicketVerification: true,
+        Ticket: true,
       },
     });
   }

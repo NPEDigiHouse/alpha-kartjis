@@ -29,7 +29,7 @@ const seedingDatabase = async () => {
         { startTime: 1690126088, endTime: 1690126088 },
       ]),
       categories: { connect: { id: category.id } },
-      thumbnailURI: `localhost:${process.env.PORT}/uploaded-file/FULL.jpg`,
+      thumbnailURI: `${process.env.STATIC_SERVER}/uploaded-file/FULL.jpg`,
       description:
         "Suara dari selatan adalah selebrasi pertunjukan musik Indonesia yang ada di makasar! yang dimana diselenggarakan oleh Hawaii Indonesia. Acara musik ini akan hadir selama 1 hari dengan konsep Road to pada tanggal 20 JULI 2023 bertempat di Lap Parking Lot Ambalat Trans Studio Mall Makasar! Menampilkan dua LEGENDA musik indonesia.",
     },

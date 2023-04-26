@@ -25,6 +25,11 @@ class Server {
     this.app.set('view engine', 'pug')
 
     this.app.disable("x-powered-by");
+    this.app.use(function (req, res, next) {
+      res.setHeader("Content-Security-Policy", "upgrade-insecure-requests");
+      next();
+    });
+
     this.app.use(cors());
     this.app.use(express.json());
     this.app.get("/test", (req: Request, res: Response) => {
@@ -40,11 +45,11 @@ class Server {
     // * static file
     this.app.use('/static', express.static(path.join(__dirname, "..", "static")))
     this.app.use(
-      "/uploaded-file",
-      express.static(path.join(__dirname, "..", "media"))
+      "/api/uploaded-file",
+      express.static(process.env.STATIC_URL ?? "media")
     );
     // * api base route
-    this.app.use("/", new CallbackRouter().register());
+    this.app.use("/api", new CallbackRouter().register());
     this.app.use("/api", new EventRouter().register());
     this.app.use("/api", new CategoryRouter().register());
     this.app.use("/api", new OrderRouter().register());
