@@ -25,23 +25,19 @@ export class CallbackService {
       data.transaction_status === "capture" ||
       data.transaction_status === "settlement"
     ) {
-      if (data.status === "SUCCESSFUL") {
-        const order = await this.orderModel.changePaymentStatusById(
-          data.order_id,
-          true
-        );
+      const order = await this.orderModel.changePaymentStatusById(
+        data.order_id,
+        true
+      );
 
-        if (order) {
-          await this.ticketConstruction.composeTicket(order);
-        }
+      if (order) {
+        await this.ticketConstruction.composeTicket(order);
       }
     } else if (
       data.transaction_status === "deny" ||
       data.transaction_status === "cancel" ||
       data.transaction_status === "expire"
     )
-      if (data.status === "FAILED") {
-        await this.orderModel.changePaymentStatusById(data.order_id, false);
-      }
+      await this.orderModel.changePaymentStatusById(data.order_id, false);
   }
 }
