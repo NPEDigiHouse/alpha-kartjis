@@ -34,7 +34,7 @@ export class PaymentService {
       for (let i = 0; i < order.orderDetails.length; i++) {
         const orderDetail = order.orderDetails[i];
         if (orderDetail.Ticket) {
-          amount += orderDetail.quantity * orderDetail.Ticket?.price;
+          amount += orderDetail.Ticket?.price;
         }
       }
     }

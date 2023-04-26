@@ -27,7 +27,7 @@ class Server {
     // * static file
     this.app.use(
       "/uploaded-file",
-      express.static(path.join(__dirname, "..", "media"))
+      express.static(process.env.STATIC_URL ?? "media")
     );
     // * api base route
     this.app.use("/", new CallbackRouter().register());
