@@ -9,7 +9,7 @@ export class Order {
       return await db.order.update({
         where: { billId },
         data: { status: status ? "SUCCESS" : "FAILED" },
-        include: { orderDetails: true },
+        include: { orderDetails: { include: { Ticket: true } } },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -41,7 +41,7 @@ export class Order {
         where: { id: orderId },
         data: { status: "SUCCESS" },
         include: {
-          orderDetails: true,
+          orderDetails: { include: { Ticket: true } },
         },
       });
     } catch (error) {
