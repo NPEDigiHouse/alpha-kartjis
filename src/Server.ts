@@ -21,8 +21,8 @@ class Server {
 
   config() {
     // Initialize Swagger with options
-    this.app.set('views', './views');
-    this.app.set('view engine', 'pug')
+    this.app.set("views", "./views");
+    this.app.set("view engine", "pug");
 
     this.app.disable("x-powered-by");
     this.app.use(function (req, res, next) {
@@ -32,18 +32,21 @@ class Server {
 
     this.app.use(cors());
     this.app.use(express.json());
-    this.app.get("/test", (req: Request, res: Response) => {
-      res.render("email", {
-        name: "Sony",
-        ticketName: "Sound of the South",
-        orderNumber: "Mx489s",
-        orderDate: "20 November 2021 17.30",
-        paymentMethod: "QRIS",
-        redirectLink: "http://www.google.com"
-    })
-    })
+    // this.app.get("/test", (req: Request, res: Response) => {
+    //   res.render("email", {
+    //     name: "Sony",
+    //     ticketName: "Sound of the South",
+    //     orderNumber: "Mx489s",
+    //     orderDate: "20 November 2021 17.30",
+    //     paymentMethod: "QRIS",
+    //     redirectLink: "http://www.google.com"
+    // })
+    // })
     // * static file
-    this.app.use('/static', express.static(path.join(__dirname, "..", "static")))
+    this.app.use(
+      "/static",
+      express.static(path.join(__dirname, "..", "static"))
+    );
     this.app.use(
       "/api/uploaded-file",
       express.static(process.env.STATIC_URL ?? "media")
