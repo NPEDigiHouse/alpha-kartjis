@@ -119,9 +119,15 @@ span.customer-name{
 .ticket-grid span{
     font-size: 14px;
 }
-
+table{
+    width: 100%;
+}
 table tr td:nth-child(even){
     text-align: right;
+}
+
+table tr td{
+    padding-top: 10px;
 }
 .ticket-grid span:nth-child(even){
     text-align: right;
@@ -138,4 +144,13 @@ table tr td:nth-child(even){
     text-decoration: none;
     border-radius: 4px;
     box-shadow: 3px 3px 0px #FEAD11;
+}
+.link{
+    display: block;
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.link a{
+    text-decoration: none;
 }
