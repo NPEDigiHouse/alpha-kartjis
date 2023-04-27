@@ -26,6 +26,10 @@ export class PaymentHelper {
       }
     );
 
+    if (response.status !== 200 && response.status !== 201) {
+      return null;
+    }
+
     return response.data;
   }
 

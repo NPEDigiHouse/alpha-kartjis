@@ -20,11 +20,15 @@ export class Order {
     }
   }
 
-  async updateBillIdAndPaymentId(orderId: string, link_id: number) {
+  async updateBillIdAndPaymentId(
+    orderId: string,
+    link_id: string,
+    token: string
+  ) {
     try {
       return await db.order.update({
         where: { id: orderId },
-        data: { billId: link_id },
+        data: { billLink: link_id, billToken: token },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

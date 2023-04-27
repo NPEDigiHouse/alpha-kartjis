@@ -41,16 +41,24 @@ export class PaymentService {
 
     const billResponse = await this.paymentHelper.createBill(orderId, amount);
 
-    const orderUpdated = await this.orderModel.updateBillIdAndPaymentId(
-      orderId,
-      billResponse.link_id
-    );
+    if (billResponse) {
+      const orderUpdated = await this.orderModel.updateBillIdAndPaymentId(
+        orderId,
+        billResponse.redirect_url,
+        billResponse.token
+      );
 
-    if (!orderUpdated) {
-      throw new NotFoundError("order's not found");
+      if (!orderUpdated) {
+        throw new NotFoundError("order's not found");
+      }
+
+      return {
+        billLink: billResponse.redirect_url,
+        token: billResponse.token,
+      };
     }
 
-    return { billLink: billResponse.redirect_url, token: billResponse.token };
+    return { billLink: order?.billLink, token: order?.billToken };
   }
 
   // !deprecated: temp use
