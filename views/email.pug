@@ -36,5 +36,10 @@ html
                             tr
                                 td.table-data-style Metode Pembayaran 
                                 td.table-data-style #{paymentMethod}
+                            tr
+                                td.table-data-style Link Tiket 
+                                td.table-data-style
+                                    span.link
+                                        a(href=`${redirectLink}`)  #{redirectLink}
                     .button-part 
                         a(href=`${redirectLink}`)   Lihat E-Ticket 
