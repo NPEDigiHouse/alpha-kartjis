@@ -58,6 +58,7 @@ span.customer-name{
 
 .wrapper{
     width: 100%;
+    padding: 0px 20px;
 }
 
 .ticket-container{
@@ -70,7 +71,7 @@ span.customer-name{
     padding: 0px 20px 20px 20px;
     display: flex;
     justify-content: center;
-    box-shadow: 6px 6px 0px #FEAD11;
+    /* box-shadow: 6px 6px 0px #FEAD11; */
     margin: 0 auto;
 }
 
@@ -86,10 +87,21 @@ span.customer-name{
 }
 
 .ticket-title h1{
-    margin-top: 50px;
+    margin-top: 20px;
     font-size: 20px;
     font-weight: 600;
     color: #313131;
+}
+
+.ticket-logo{
+    width: 100%;
+    margin-top: 20px;
+}
+
+.ticket-logo img{
+    width: 150px;
+    margin: 0 auto;
+    display: block;
 }
 
 .ticket-salutation, .ticket-more-info, .ticket-detail, .button-part{
@@ -143,7 +155,7 @@ table tr td{
     font-weight: bold;
     text-decoration: none;
     border-radius: 4px;
-    box-shadow: 3px 3px 0px #FEAD11;
+    /* box-shadow: 3px 3px 0px #FEAD11; */
 }
 .link{
     display: block;
