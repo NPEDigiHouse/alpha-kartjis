@@ -5,7 +5,10 @@ import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
 export class Ticket {
-  async reduceTicketBasedOnQuantityBought(ticketId: string, quantity: number) {
+  async reduceTicketBasedOnQuantityBought(
+    ticketId: string | null,
+    quantity: number
+  ) {
     try {
       return await db.ticket.update({
         where: {
