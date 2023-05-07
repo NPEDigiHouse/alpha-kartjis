@@ -4,6 +4,7 @@ import { Order } from "../../models/Order";
 import { TicketVerification } from "../../models/TicketVerification";
 import { hashData } from "../../utils";
 import { TicketConstruction } from "../facade/ticketConstruction";
+import { Ticket } from "../../models/Ticket";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -11,12 +12,14 @@ dotenv.config();
 export class CallbackService {
   orderModel: Order;
   ticketVerificationModel: TicketVerification;
+  ticketModel: Ticket;
   ticketConstruction: TicketConstruction;
 
   constructor() {
     this.orderModel = new Order();
     this.ticketVerificationModel = new TicketVerification();
     this.ticketConstruction = new TicketConstruction();
+    this.ticketModel = new Ticket();
   }
 
   async verifyPayment(data: any) {
