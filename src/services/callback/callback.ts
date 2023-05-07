@@ -49,6 +49,13 @@ export class CallbackService {
 
       if (order) {
         await this.ticketConstruction.composeTicket(order, data.payment_type);
+
+        for (let i = 0; i < order.orderDetails.length; i++) {
+          await this.ticketModel.reduceTicketBasedOnQuantityBought(
+            order.orderDetails[i].ticketId,
+            1
+          );
+        }
       }
     } else if (
       data.transaction_status === "deny" ||

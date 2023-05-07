@@ -60,12 +60,12 @@ export class TicketPurchasemmentService {
 
     await this.orderDetailModel.addNewOrderDetail(ids, orderId, payload);
 
-    for (let i = 0; i < payload.tickets.length; i++) {
-      await this.ticketModel.reduceTicketBasedOnQuantityBought(
-        payload.tickets[i].ticketId,
-        1
-      );
-    }
+    // for (let i = 0; i < payload.tickets.length; i++) {
+    //   await this.ticketModel.reduceTicketBasedOnQuantityBought(
+    //     payload.tickets[i].ticketId,
+    //     1
+    //   );
+    // }
 
     return order;
   }
