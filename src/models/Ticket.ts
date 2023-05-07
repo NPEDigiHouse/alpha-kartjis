@@ -12,7 +12,7 @@ export class Ticket {
     try {
       return await db.ticket.update({
         where: {
-          id: ticketId,
+          id: ticketId || "",
         },
         data: {
           stock: { decrement: quantity },
