@@ -41,7 +41,7 @@ export class PaymentService {
 
     const billResponse = await this.paymentHelper.createBill(orderId, amount);
 
-    if (billResponse) {
+    if (billResponse && !order?.billLink && !order?.billToken) {
       const orderUpdated = await this.orderModel.updateBillIdAndPaymentId(
         orderId,
         billResponse.redirect_url,
