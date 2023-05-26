@@ -25,6 +25,7 @@ export class TicketPurchasemmentService {
   ) {
     const tickets = await this.ticketModel.getTicketByEventId(eventId);
 
+    // * check tickets to be purchased if stock is empty returns error
     for (let i = 0; i < tickets.length; i++) {
       const ticket = payload.tickets.find(
         (ticket) => ticket.ticketId === tickets[i].id
@@ -60,12 +61,13 @@ export class TicketPurchasemmentService {
 
     await this.orderDetailModel.addNewOrderDetail(ids, orderId, payload);
 
-    // for (let i = 0; i < payload.tickets.length; i++) {
-    //   await this.ticketModel.reduceTicketBasedOnQuantityBought(
-    //     payload.tickets[i].ticketId,
-    //     1
-    //   );
-    // }
+    for (let i = 0; i < payload.tickets.length; i++) {
+      await this.ticketModel.reduceTicketBasedOnQuantityBought(
+        payload.tickets[i].ticketId,
+        1,
+        "DEC"
+      );
+    }
 
     return order;
   }
