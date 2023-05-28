@@ -71,6 +71,7 @@ export const EventDetailMapper = (
       name: ticket.name,
       price: ticket.price,
       stock: ticket.stock,
+      adminFee: ticket.adminFee,
     })),
     schedules,
     quota,

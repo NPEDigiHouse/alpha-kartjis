@@ -41,6 +41,7 @@ model Ticket {
   id        String        @id
   name      String
   price     Int           @db.UnsignedInt
+  adminFee  Int?          @db.UnsignedInt
   Event     Event?        @relation(fields: [eventId], references: [id])
   eventId   String?
   orders    OrderDetail[]
