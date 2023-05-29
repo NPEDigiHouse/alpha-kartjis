@@ -21,6 +21,8 @@ jobs:
       with:
         node-version: 'lts/Hydrogen'
         cache: 'npm'
+    - name: Install Deps
+      run: npm ci
     - name: Create production build
       run: npm run build
     - name: Copy production build to production server
