@@ -21,8 +21,6 @@ jobs:
       with:
         node-version: 'lts/Hydrogen'
         cache: 'npm'
-    - name: Install dependencies 
-      run: npm ci
     - name: Create production build
       run: npm run build
     - name: Copy production build to production server
@@ -40,4 +38,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        script: pm2 restart kartjis-api
+        script: npm ci && pm2 restart kartjis-api
