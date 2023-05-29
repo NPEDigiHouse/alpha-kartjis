@@ -1,0 +1,47 @@
+//- - var url = #{redirectLink};
+doctype=html 
+html 
+    head 
+        title Express.js + Pug 
+        style 
+            include style.css
+    body.max-w-full.w-screen.flex.justify-center.items-center
+        .wrapper
+            div.ticket-container
+                .content 
+                    .ticket-logo 
+                        img(src="https://sds.kartjis.id/api/uploaded-file/icon-kartjis.svg", alt="logo")
+                    .ticket-title 
+                        h1 Yay, kamu berhasil mendapatkan tiket! 
+                        
+                    .ticket-salutation
+                        p 
+                            | 
+                            | Halo 
+                            span.customer-name #{name}
+                        p Terima kasih sudah memesan tiket "#{ticketName}" di Kartjis 
+                    
+                    .ticket-more-info 
+                        p Proses pemesanan dan pembayaran kamu telah kami terima. Tiket untuk event ini sudah kami terbitkan.
+
+                    .ticket-detail 
+                        table.tabel-style 
+                            tr
+                                td.table-data-style Status Pesanan
+                                td.table-data-style Paid
+                            tr
+                                td.table-data-style Nomor Pesanan 
+                                td.table-data-style #{orderNumber}
+                            tr
+                                td.table-data-style Tanggal Pesanan
+                                td.table-data-style #{orderDate}
+                            tr
+                                td.table-data-style Metode Pembayaran 
+                                td.table-data-style #{paymentMethod}
+                            tr
+                                td.table-data-style Link Tiket 
+                                td.table-data-style
+                                    span.link
+                                        a(href=`${redirectLink}`)  #{redirectLink}
+                    .button-part 
+                        a(href=`${redirectLink}`)   Lihat E-Ticket 

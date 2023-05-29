@@ -9,7 +9,7 @@ export class Order {
       return await db.order.update({
         where: { billId },
         data: { status: status ? "SUCCESS" : "FAILED" },
-        include: { orderDetails: true },
+        include: { orderDetails: { include: { Ticket: true } } },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -20,11 +20,15 @@ export class Order {
     }
   }
 
-  async updateBillIdAndPaymentId(orderId: string, link_id: number) {
+  async updateBillIdAndPaymentId(
+    orderId: string,
+    link_id: string,
+    token: string
+  ) {
     try {
       return await db.order.update({
         where: { id: orderId },
-        data: { billId: link_id },
+        data: { billLink: link_id, billToken: token },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -35,13 +39,14 @@ export class Order {
     }
   }
 
-  async changePaymentStatusById(orderId: string) {
+  async changePaymentStatusById(orderId: string, status: boolean) {
     try {
       return await db.order.update({
         where: { id: orderId },
-        data: { status: "SUCCESS" },
+        data: { status: status ? "SUCCESS" : "FAILED" },
         include: {
-          orderDetails: true,
+          orderDetails: { include: { Ticket: true } },
+          Event: true,
         },
       });
     } catch (error) {
@@ -76,7 +81,7 @@ export class Order {
       where: { id: orderId },
       include: {
         Event: true,
-        orderDetails: true,
+        orderDetails: { include: { Ticket: true } },
         Customer: true,
       },
     });

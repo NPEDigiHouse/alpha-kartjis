@@ -33,6 +33,6 @@ const TicketPurchasementSchema = Joi.object({
 });
 
 export const TicketPurchasementPayloadSchema = Joi.object({
-  customerProfile: CustomerProfileSchema.required(),
+  customerProfile: CustomerProfileSchema.optional(),
   tickets: Joi.array().items(TicketPurchasementSchema).min(1).required(),
 });

@@ -20,13 +20,13 @@ export class CallbackHandler {
     next: NextFunction
   ) {
     try {
-      const { data, token } = req.body;
+      const data = req.body;
 
-      if (!data || !token) {
+      if (!data) {
         throw new InternalServerError("kesalahan server");
       }
 
-      await this.callbackService.verifyPayment(data, token);
+      await this.callbackService.verifyPayment(data);
 
       return res.json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE));
     } catch (error) {

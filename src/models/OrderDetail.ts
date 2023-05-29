@@ -44,8 +44,14 @@ export class OrderDetail {
     return await db.orderDetail.findUnique({
       where: { id: orderDetailId },
       include: {
-        Order: { include: { Event: true } },
+        Order: {
+          include: {
+            Event: true,
+            orderDetails: { include: { Ticket: true } },
+          },
+        },
         TicketVerification: true,
+        Ticket: true,
       },
     });
   }

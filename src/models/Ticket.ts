@@ -5,16 +5,31 @@ import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
 export class Ticket {
-  async reduceTicketBasedOnQuantityBought(ticketId: string, quantity: number) {
+  async reduceTicketBasedOnQuantityBought(
+    ticketId: string | null,
+    quantity: number,
+    operation: "INC" | "DEC"
+  ) {
     try {
-      return await db.ticket.update({
-        where: {
-          id: ticketId,
-        },
-        data: {
-          stock: { decrement: quantity },
-        },
-      });
+      if (operation === "DEC") {
+        return await db.ticket.update({
+          where: {
+            id: ticketId || "",
+          },
+          data: {
+            stock: { decrement: quantity },
+          },
+        });
+      } else {
+        return await db.ticket.update({
+          where: {
+            id: ticketId || "",
+          },
+          data: {
+            stock: { increment: quantity },
+          },
+        });
+      }
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         throw new BadRequestError(error.message);

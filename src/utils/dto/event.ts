@@ -9,6 +9,8 @@ interface IListEventsDTO {
   schedules: IEventSchedule[];
   cheapestTicketPrice?: number;
   expensiveTicketPrice?: number;
+  description?: string;
+  quota?: number;
 }
 
 interface IEventDetailDTO {
@@ -19,6 +21,7 @@ interface IEventDetailDTO {
   schedules: IEventSchedule[];
   description?: string;
   tickets?: Ticket[];
+  quota: number;
 }
 
 export const ListEventMapper = (
@@ -26,6 +29,12 @@ export const ListEventMapper = (
     tickets: Ticket[];
   }
 ) => {
+  let quota = 0;
+
+  for (let i = 0; i < data.tickets.length; i++) {
+    quota += data.tickets[i].stock;
+  }
+
   const schedules = JSON.parse(data.schedules?.toString() ?? "");
   return {
     id: data.id,
@@ -34,6 +43,8 @@ export const ListEventMapper = (
     thumbnailURI: data.thumbnailURI,
     cheapestTicketPrice: data.tickets.at(0)?.price ?? null,
     expensiveTicketPrice: data.tickets.at(-1)?.price ?? null,
+    description: data.description,
+    quota,
     schedules,
   } as IListEventsDTO;
 };
@@ -44,6 +55,11 @@ export const EventDetailMapper = (
   }
 ) => {
   const schedules = JSON.parse(data.schedules?.toString() ?? "");
+  let quota = 0;
+
+  for (let i = 0; i < data.tickets.length; i++) {
+    quota += data.tickets[i].stock;
+  }
   return {
     id: data.id,
     location: data.location,
@@ -55,7 +71,9 @@ export const EventDetailMapper = (
       name: ticket.name,
       price: ticket.price,
       stock: ticket.stock,
+      adminFee: ticket.adminFee,
     })),
     schedules,
+    quota,
   } as IEventDetailDTO;
 };
