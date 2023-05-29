@@ -20,6 +20,7 @@ interface IOrderDetail {
   ticketName?: string;
   price?: number;
   email: string;
+  adminFee?: number;
 }
 
 export const OrderDetailMapper = (
@@ -52,6 +53,7 @@ export const OrderDetailMapper = (
         ticketId: data.orderDetails[i].ticketId ?? undefined,
         ticketName: data.orderDetails[i].Ticket?.name,
         email: data.orderDetails[i].email,
+        adminFee: data.orderDetails[i].Ticket?.adminFee ?? 0,
       });
     }
   }
