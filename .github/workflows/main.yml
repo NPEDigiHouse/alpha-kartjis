@@ -34,6 +34,15 @@ jobs:
         source: dist/
         target: ~/kartjis-api
         strip_components: 1
+    - name: Copy package.json and package-lock.json
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: package.json,package-lock.json
+        target: ~/kartjis-api
+        strip_components: 1
     - name: Restart pm2 instance
       uses: appleboy/ssh-action@v0.1.10
       with:
