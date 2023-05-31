@@ -25,6 +25,22 @@ export class CallbackService {
   async verifyPayment(data: any) {
     if (data.fraud_status) {
       if (data.fraud_status !== "accept") {
+        const order = await this.orderModel.changePaymentStatusById(
+          data.order_id,
+          false
+        );
+
+        if (order) {
+          // await this.ticketConstruction.composeTicket(order, data.payment_type);
+
+          for (let i = 0; i < order.orderDetails.length; i++) {
+            await this.ticketModel.reduceTicketBasedOnQuantityBought(
+              order.orderDetails[i].ticketId,
+              1,
+              "INC"
+            );
+          }
+        }
         throw new BadRequestError("payment contains fraud content");
       }
     }
@@ -38,6 +54,22 @@ export class CallbackService {
     );
 
     if (challengedSignatureKey !== data.signature_key) {
+      const order = await this.orderModel.changePaymentStatusById(
+        data.order_id,
+        false
+      );
+
+      if (order) {
+        // await this.ticketConstruction.composeTicket(order, data.payment_type);
+
+        for (let i = 0; i < order.orderDetails.length; i++) {
+          await this.ticketModel.reduceTicketBasedOnQuantityBought(
+            order.orderDetails[i].ticketId,
+            1,
+            "INC"
+          );
+        }
+      }
       throw new BadRequestError("transaction is not authentic");
     }
 
@@ -63,7 +95,9 @@ export class CallbackService {
     } else if (
       data.transaction_status === "deny" ||
       data.transaction_status === "cancel" ||
-      data.transaction_status === "expire"
+      data.transaction_status === "expire" ||
+      data.transaction_status === "refund" ||
+      data.transaction_status === "partial_refund"
     ) {
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,

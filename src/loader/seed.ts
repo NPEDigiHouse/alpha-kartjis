@@ -26,7 +26,7 @@ const seedingDatabase = async () => {
       name: "ROAD TO Suara Dari Selatan",
       location: "LAPANGAN PARKIR LOT AMBALAT TRANS STUDIO MALL MAKASSAR",
       schedules: JSON.stringify([
-        { startTime: 1689829725, endTime: 1689829725 },
+        { startTime: 1689847200, endTime: 1689868740 },
       ]),
       categories: { connect: { id: category.id } },
       thumbnailURI: `${process.env.STATIC_SERVER}/uploaded-file/FULL.jpg`,
