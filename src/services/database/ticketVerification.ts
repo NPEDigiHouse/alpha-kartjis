@@ -9,6 +9,18 @@ export class TicketVerificationService {
     this.model = new TicketVerification();
   }
 
+  async getTicketScannedStatus(hash: string) {
+    const ticketVerification = await this.model.getTicketVerificationByHash(
+      hash
+    );
+
+    if (!ticketVerification) {
+      throw new NotFoundError("ticket's not found");
+    }
+
+    return ticketVerification.isScanned;
+  }
+
   async verifyTicketHash(hash: string) {
     const ticketVerification = await this.model.getTicketVerificationByHash(
       hash

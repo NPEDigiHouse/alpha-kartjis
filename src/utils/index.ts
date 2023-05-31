@@ -3,10 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const createResponse = (
-  status: string,
-  data: string | object | null = null
-) => {
+export const createResponse = (status: string, data: any = null) => {
   if (data) {
     return { status, data };
   }
