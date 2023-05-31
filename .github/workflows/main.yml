@@ -5,7 +5,7 @@ name: CI
 # Controls when the action will run. 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "staging" ]
     
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         source: .
-        target: ~/kartjis-api
+        target: ~/kartjis-api-stage
         strip_components: 1
     - name: Restart pm2 instance
       uses: appleboy/ssh-action@v0.1.10
@@ -38,4 +38,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        script: cd ~/kartjis-api && npm ci && npm run build && pm2 restart kartjis-api
+        script: cd ~/kartjis-api-staging && npm ci && npm run build && pm2 restart kartjis-api-staging
