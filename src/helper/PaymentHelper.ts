@@ -10,27 +10,29 @@ export class PaymentHelper {
   }
 
   async createBill(orderId: string, amount: number) {
-    const response = await axios.post(
-      config.config().MIDTRANS_SNAP_URL ?? "",
-      {
-        transaction_details: {
-          order_id: orderId,
-          gross_amount: amount,
+    try {
+      const response = await axios.post(
+        config.config().MIDTRANS_SNAP_URL ?? "",
+        {
+          transaction_details: {
+            order_id: orderId,
+            gross_amount: amount,
+          },
         },
-      },
-      {
-        auth: {
-          username: config.config().MIDTRANS_SERVER_KEY ?? "",
-          password: "",
-        },
+        {
+          auth: {
+            username: config.config().MIDTRANS_SERVER_KEY ?? "",
+            password: "",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response.status !== 200 && error.response.status !== 201) {
+        return null;
       }
-    );
-
-    if (response.status !== 200 && response.status !== 201) {
-      return null;
     }
-
-    return response.data;
   }
 
   // !UNUSED: flip

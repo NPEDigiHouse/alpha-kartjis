@@ -13,6 +13,10 @@ export class TicketVerificationRouter {
   }
 
   register() {
+    // * get status of ticket
+    this.router
+      .route(this.path + "/:hash/scanned")
+      .get(this.handler.getScannedStatus);
     // * /ticket-verifications
     // * PUT method verifies ticket
     this.router
