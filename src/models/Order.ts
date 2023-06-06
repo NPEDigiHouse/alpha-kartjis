@@ -4,6 +4,14 @@ import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
 export class Order {
+  async getOrderByStatus(status: "INPROCESS" | "SUCCESS" | "FAILED") {
+    return await db.order.findMany({
+      where: {
+        status,
+      },
+    });
+  }
+
   async changePaymentStatusByBillId(billId: number, status: boolean) {
     try {
       return await db.order.update({

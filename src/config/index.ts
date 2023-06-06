@@ -12,6 +12,7 @@ class Config {
         MIDTRANS_SNAP_URL: process.env.MIDTRANS_SNAP_URL_PRODUCTION,
         KARTJIS_MAIL: process.env.KARTJIS_MAIL_PRODUCTION,
         KARTJIS_PASSWORD: process.env.KARTJIS_PASSWORD_PRODUCTION,
+        MIDTRANS_API_URL: process.env.MIDTRANS_API_URL_PRODUCTION,
       };
     } else {
       return {
@@ -19,6 +20,7 @@ class Config {
         MIDTRANS_SNAP_URL: process.env.MIDTRANS_SNAP_URL,
         KARTJIS_MAIL: process.env.KARTJIS_MAIL,
         KARTJIS_PASSWORD: process.env.KARTJIS_PASSWORD,
+        MIDTRANS_API_URL: process.env.MIDTRANS_API_URL,
       };
     }
   }
