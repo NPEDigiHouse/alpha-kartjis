@@ -1,8 +1,8 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { config } from "../src/config";
-import { Order } from "../src/models/Order";
-import { Ticket } from "../src/models/Ticket";
+import { config } from "../config";
+import { Order } from "../models/Order";
+import { Ticket } from "../models/Ticket";
 
 dotenv.config();
 
