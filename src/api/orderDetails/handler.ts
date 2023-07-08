@@ -9,6 +9,7 @@ export class OrderDetailHandler {
     this.orderDetailService = new OrderDetailService();
 
     this.getOrderDetailDetail = this.getOrderDetailDetail.bind(this);
+    this.getOrderDetails = this.getOrderDetails.bind(this);
   }
 
   async getOrderDetails(req: Request, res: Response, next: NextFunction) {
