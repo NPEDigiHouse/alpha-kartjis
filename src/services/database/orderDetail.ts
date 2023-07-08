@@ -4,10 +4,14 @@ import { OrderDetail } from "../../models/OrderDetail";
 import { OrderDetailDetailMapper } from "../../utils/dto/orderDetail";
 
 export class OrderDetailService {
-  model: OrderDetail;
+  private model: OrderDetail;
 
   constructor() {
     this.model = new OrderDetail();
+  }
+
+  async getOrderDetails() {
+    return this.model.getOrderDetails();
   }
 
   async getOrderDetailDetail(orderDetailId: string) {

@@ -11,6 +11,14 @@ export class OrderDetailHandler {
     this.getOrderDetailDetail = this.getOrderDetailDetail.bind(this);
   }
 
+  async getOrderDetails(req: Request, res: Response, next: NextFunction) {
+    const orderDetails = await this.orderDetailService.getOrderDetails();
+
+    return res.json(
+      createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails)
+    );
+  }
+
   async getOrderDetailDetail(req: Request, res: Response, next: NextFunction) {
     try {
       const { orderDetailId } = req.params;

@@ -5,6 +5,28 @@ import { IPutTicketPurchasementPayload } from "../utils/interface/misc/ticketEve
 import db from "../database";
 
 export class OrderDetail {
+  async getOrderDetails() {
+    return db.orderDetail.findMany({
+      where: {
+        Order: {
+          status: "SUCCESS",
+        },
+      },
+      select: {
+        birthDate: true,
+        email: true,
+        gender: true,
+        name: true,
+        phoneNumber: true,
+        Order: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
   async addNewOrderDetail(
     ids: string[],
     orderId: string,

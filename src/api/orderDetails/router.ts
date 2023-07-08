@@ -17,6 +17,7 @@ export class OrderDetailRouter {
     this.router
       .route(this.path + "/:orderDetailId")
       .get(this.handler.getOrderDetailDetail);
+    this.router.route(this.path).get(this.handler.getOrderDetails);
 
     return this.router;
   }
