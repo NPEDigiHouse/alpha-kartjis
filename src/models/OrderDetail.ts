@@ -21,6 +21,8 @@ export class OrderDetail {
         Order: {
           select: {
             id: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },
