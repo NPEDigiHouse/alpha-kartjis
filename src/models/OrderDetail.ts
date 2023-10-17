@@ -20,6 +20,9 @@ export class OrderDetail {
         TicketVerification: true,
         Ticket: true,
       },
+      orderBy: {
+        id: "asc",
+      },
     });
   }
 
