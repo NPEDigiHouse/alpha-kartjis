@@ -2,17 +2,36 @@ import { Request, Response, NextFunction } from "express";
 import { OrderService } from "../../services/database/order";
 import { constants, createResponse } from "../../utils";
 import { PaymentService } from "../../services/facade/payment";
+import { OrderDetailService } from "../../services/database/orderDetail";
 
 export class OrderHandler {
-  orderService: OrderService;
-  paymentService: PaymentService;
+  private orderService: OrderService;
+  private paymentService: PaymentService;
+  private orderDetailService: OrderDetailService;
 
   constructor() {
     this.orderService = new OrderService();
+    this.orderDetailService = new OrderDetailService();
     this.paymentService = new PaymentService();
 
     this.getOrderDetail = this.getOrderDetail.bind(this);
     this.putOrder = this.putOrder.bind(this);
+    this.getOrderOrderDetails = this.getOrderOrderDetails.bind(this);
+  }
+
+  async getOrderOrderDetails(req: Request, res: Response, next: NextFunction) {
+    const { orderId } = req.params;
+
+    try {
+      const orderDetail =
+        await this.orderDetailService.getOrderDetailDetailByOrderId(orderId);
+
+      return res.json(
+        createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetail)
+      );
+    } catch (error) {
+      return next(error);
+    }
   }
 
   // * this will use flip as payment gateway

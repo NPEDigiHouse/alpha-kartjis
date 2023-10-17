@@ -20,6 +20,10 @@ export class OrderRouter {
       .get(this.handler.getOrderDetail)
       .put(this.handler.putOrder);
 
+    // * get order details from order id
+    this.router
+      .route(this.path + "/:orderId/order-details")
+      .get(this.handler.getOrderOrderDetails);
     return this.router;
   }
 }

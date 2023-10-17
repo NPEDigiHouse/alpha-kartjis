@@ -10,6 +10,25 @@ export class OrderDetailService {
     this.model = new OrderDetail();
   }
 
+  async getOrderDetailDetailByOrderId(orderId: string) {
+    const orderDetail = await this.model.getOrderDetailByorderId(orderId);
+
+    if (!orderDetail) {
+      throw new NotFoundError("orderDetail's not found");
+    }
+
+    if (orderDetail[0]?.Order?.status !== "SUCCESS") {
+      throw new BadRequestError(
+        "order hasn't been verified, the status is " +
+          orderDetail[0]?.Order?.status
+      );
+    }
+
+    return orderDetail.map((d) => {
+      return OrderDetailDetailMapper(d);
+    });
+  }
+
   async getOrderDetails() {
     return this.model.getOrderDetails();
   }
