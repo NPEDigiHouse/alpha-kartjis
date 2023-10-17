@@ -38,4 +38,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        script: cd ~/kartjis-api-v2 && npm ci && npm run build && pm2 restart karjis-api
+        script: cd ~/kartjis-api-v2 && npm ci && npm run build && pm2 restart kartjis-api-v2
