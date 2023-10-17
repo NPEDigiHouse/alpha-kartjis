@@ -78,6 +78,8 @@ model OrderDetail {
   birthDate          Int?                @db.Int
   phoneNumber        String?
   gender             Gender
+  address            String?             @db.VarChar(255)
+  socialMedia        String?             @db.VarChar(255)
   TicketVerification TicketVerification?
 
   @@map("orderDetails")

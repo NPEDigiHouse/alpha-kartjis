@@ -14,6 +14,8 @@ interface ITicketPurchasement {
   phoneNumber: string;
   gender: "FEMALE" | "MALE";
   quantity: number;
+  address?: string;
+  socialMedia?: string;
 }
 
 export interface IPutTicketPurchasementPayload {

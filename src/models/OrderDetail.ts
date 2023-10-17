@@ -46,6 +46,8 @@ export class OrderDetail {
           phoneNumber: payload.tickets[i].phoneNumber,
           quantity: payload.tickets[i].quantity,
           birthDate: payload.tickets[i].birthDate,
+          address: payload.tickets[i].address,
+          socialMedia: payload.tickets[i].socialMedia,
           orderId,
         };
 
