@@ -30,6 +30,8 @@ const TicketPurchasementSchema = Joi.object({
   gender: Joi.string().valid("FEMALE", "MALE").required(),
   ticketId: Joi.string().required(),
   quantity: Joi.number().min(1).required(),
+  address: Joi.string().optional(),
+  socialMedia: Joi.string().optional(),
 });
 
 export const TicketPurchasementPayloadSchema = Joi.object({

@@ -3,6 +3,7 @@ import { Order } from "../../models/Order";
 import { TicketVerification } from "../../models/TicketVerification";
 import { PaymentHelper } from "../../helper/PaymentHelper";
 import { TicketConstruction } from "./ticketConstruction";
+import { Ticket } from "../../models/Ticket";
 
 interface OrderDetail {
   orderDetailId: string;
@@ -69,11 +70,24 @@ export class PaymentService {
     if (!order) {
       throw new NotFoundError("order's not found");
     }
+    /*
+    const ticketModel = new Ticket();
+    if (order) {
+      for (let i = 0; i < order.orderDetails.length; i++) {
+        await ticketModel.reduceTicketBasedOnQuantityBought(
+          order.orderDetails[i].ticketId,
+          1,
+          "DEC"
+        );
+      }
+    }
+    */
 
     //! this object is only for testing so I make it local object
     const ticketConstruction = new TicketConstruction();
     await ticketConstruction.composeTicket(order, "other");
 
-    return { billLink: "https://random.site", token: "asfjotuasdf0127491" };
+    // return { billLink: "https://random.site", token: "asfjotuasdf0127491" };
+    return { billLink: "", token: "" };
   }
 }

@@ -51,8 +51,11 @@ export class Event {
     return await db.event.findMany({
       include: {
         tickets: {
-          orderBy: { price: "asc" },
+          orderBy: [{ price: "asc" }],
         },
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     });
   }
