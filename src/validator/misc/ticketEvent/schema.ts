@@ -32,6 +32,7 @@ const TicketPurchasementSchema = Joi.object({
   quantity: Joi.number().min(1).required(),
   address: Joi.string().optional(),
   socialMedia: Joi.string().optional(),
+  location: Joi.string().optional(),
 });
 
 export const TicketPurchasementPayloadSchema = Joi.object({

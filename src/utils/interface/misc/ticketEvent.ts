@@ -16,6 +16,7 @@ interface ITicketPurchasement {
   quantity: number;
   address?: string;
   socialMedia?: string;
+  location?: string;
 }
 
 export interface IPutTicketPurchasementPayload {
