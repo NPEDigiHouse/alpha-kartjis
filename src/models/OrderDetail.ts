@@ -69,6 +69,7 @@ export class OrderDetail {
           birthDate: payload.tickets[i].birthDate,
           address: payload.tickets[i].address,
           socialMedia: payload.tickets[i].socialMedia,
+          location: payload.tickets[i].location,
           orderId,
         };
 
