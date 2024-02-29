@@ -6,3 +6,8 @@ node_modules
 prisma/migrations
 dist
 media
+*.sh
+*.sql
+*.sql.save
+*.sh.save
+*.ts.save
