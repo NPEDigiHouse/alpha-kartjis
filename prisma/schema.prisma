@@ -99,6 +99,7 @@ model Order {
   billLink     String?       @db.VarChar(255)
   billToken    String?       @db.VarChar(255)
   paymentId    String?       @db.VarChar(255)
+  paymentType  String?       @db.VarChar(100)
   eventId      String?
 
   @@map("orders")

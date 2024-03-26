@@ -79,7 +79,8 @@ export class CallbackService {
     ) {
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,
-        true
+        true,
+        data.payment_type
       );
 
       if (order) {

@@ -26,27 +26,39 @@ export class OrderDetail {
     });
   }
 
-  async getOrderDetails() {
+  async getOrderDetails(eventId: string, page: number = 1) {
     return db.orderDetail.findMany({
       where: {
         Order: {
+          eventId,
           status: "SUCCESS",
         },
       },
       select: {
+        location: true,
         birthDate: true,
         email: true,
         gender: true,
         name: true,
         phoneNumber: true,
+        address: true,
+        socialMedia: true,
         Order: {
           select: {
             id: true,
             createdAt: true,
             updatedAt: true,
+            paymentType: true,
+          },
+        },
+        Ticket: {
+          select: {
+            name: true,
           },
         },
       },
+      take: 20,
+      skip: (page - 1) * 20,
     });
   }
 

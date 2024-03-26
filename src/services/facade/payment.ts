@@ -36,7 +36,7 @@ export class PaymentService {
         const orderDetail = order.orderDetails[i];
         if (orderDetail.Ticket) {
           amount +=
-            orderDetail.Ticket?.price + (orderDetail.Ticket.adminFee ?? 0);
+            orderDetail.Ticket?.price + (orderDetail.Ticket.adminFee ?? 10000);
         }
       }
     }
