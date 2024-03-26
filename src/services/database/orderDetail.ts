@@ -29,8 +29,8 @@ export class OrderDetailService {
     });
   }
 
-  async getOrderDetails() {
-    return this.model.getOrderDetails();
+  async getOrderDetails(eventId: string, page?: number) {
+    return this.model.getOrderDetails(eventId, page);
   }
 
   async getOrderDetailDetail(orderDetailId: string) {

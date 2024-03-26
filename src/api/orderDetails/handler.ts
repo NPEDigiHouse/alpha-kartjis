@@ -13,7 +13,13 @@ export class OrderDetailHandler {
   }
 
   async getOrderDetails(req: Request, res: Response, next: NextFunction) {
-    const orderDetails = await this.orderDetailService.getOrderDetails();
+    const { eventId } = req.params;
+    const { page } = req.query;
+
+    const orderDetails = await this.orderDetailService.getOrderDetails(
+      eventId,
+      parseInt(String(page ?? "1"))
+    );
 
     return res.json(
       createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails)
