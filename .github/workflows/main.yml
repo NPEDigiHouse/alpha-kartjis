@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - uses: actions/checkout@v3
       - name: Use Node.js lts/Hydrogen
         uses: actions/setup-node@v3
@@ -40,31 +39,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: cd ~/kartjis-api && npm ci && npm run build && pm2 restart kartjis-payment-worker && pm2 restart karjis-api
-
-    - uses: actions/checkout@v3
-    - name: Use Node.js lts/Hydrogen
-      uses: actions/setup-node@v3
-      with:
-        node-version: 'lts/Hydrogen'
-        cache: 'npm'
-#     - name: Install Deps
-#       run: npm ci
-#     - name: Create production build
-#       run: npm run build
-    - name: Copy repo to remote host
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        source: .
-        target: ~/kartjis-api-v2
-        strip_components: 1
-    - name: Restart pm2 instance
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        script: cd ~/kartjis-api-v2 && npm ci && npm run build && pm2 restart kartjis-api-v2
 
