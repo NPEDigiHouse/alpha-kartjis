@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { CallbackService } from "../../services/callback/callback";
 import { constants, createResponse } from "../../utils";
 import { InternalServerError } from "../../exceptions/InternalError";
-import { BadRequestError } from "../../exceptions/BadRequestError";
 
 export class CallbackHandler {
   callbackService: CallbackService;
@@ -26,7 +25,7 @@ export class CallbackHandler {
         throw new InternalServerError("kesalahan server");
       }
 
-      await this.callbackService.verifyPayment(data);
+      await this.callbackService.verifyPaymentCallback(data);
 
       return res.json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE));
     } catch (error) {

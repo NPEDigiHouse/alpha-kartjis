@@ -18,6 +18,7 @@ export class PaymentHelper {
             order_id: orderId,
             gross_amount: amount,
           },
+          custom_field1: "core-payment",
         },
         {
           auth: {
