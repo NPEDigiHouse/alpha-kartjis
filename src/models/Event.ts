@@ -42,6 +42,18 @@ export class Event {
       include: {
         tickets: {
           orderBy: { price: "asc" },
+          include: {
+            orders: {
+              include: {
+                Order: true,
+              },
+            },
+          },
+          // where: {
+          //   orders: {
+          //     every: { Order: { status: "SUCCESS" } },
+          //   },
+          // },
         },
       },
     });

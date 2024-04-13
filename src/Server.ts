@@ -9,6 +9,7 @@ import { OrderRouter } from "./api/orders/router";
 import { OrderDetailRouter } from "./api/orderDetails/router";
 import { TicketVerificationRouter } from "./api/ticketVerification/router";
 import { CallbackRouter } from "./api/callback/router";
+import { StatsRouter } from "./api/stats/router";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ class Server {
     this.app.use("/api", new OrderRouter().register());
     this.app.use("/api", new OrderDetailRouter().register());
     this.app.use("/api", new TicketVerificationRouter().register());
+    this.app.use("/api", new StatsRouter().register());
     // * error handling
     this.app.use(ErrorHandler);
   }

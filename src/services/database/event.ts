@@ -17,6 +17,16 @@ export class EventService {
     return data;
   }
 
+  async getEventByIdV2(eventId: string) {
+    const event = await this.model.getEventById(eventId);
+
+    if (!event) {
+      throw new NotFoundError("event's not found");
+    }
+
+    return event;
+  }
+
   async getEventById(eventId: string) {
     const event = await this.model.getEventById(eventId);
 
