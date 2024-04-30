@@ -11,17 +11,24 @@ datasource db {
 }
 
 model Event {
-  id           String     @id
-  name         String     @db.VarChar(255)
-  location     String     @db.VarChar(255)
-  description  String?    @db.Text
-  thumbnailURI String?    @db.VarChar(255)
-  categories   Category[]
-  schedules    Json
-  tickets      Ticket[]
-  orders       Order[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id                   String     @id
+  name                 String     @db.VarChar(255)
+  location             String     @db.VarChar(255)
+  description          String?    @db.Text
+  thumbnailURI         String?    @db.VarChar(255)
+  paymentBankName      String?    @db.VarChar(100)
+  paymentAccountNumber String?    @db.VarChar(50)
+  paymentAccountName   String?    @db.VarChar(255)
+  commiteeName         String?    @db.VarChar(255)
+  commiteeEmail        String?    @db.VarChar(255)
+  commiteeEOName       String?    @db.VarChar(255)
+  commiteePhoneNumber  String?    @db.VarChar(15)
+  categories           Category[]
+  schedules            Json
+  tickets              Ticket[]
+  orders               Order[]
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
 
   @@map("events")
 }
