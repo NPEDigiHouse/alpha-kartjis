@@ -52,6 +52,7 @@ export class Ticket {
           name: payload.name,
           price: payload.price,
           stock: payload.stock,
+          adminFee: payload.adminFee,
         },
       });
     } catch (error) {

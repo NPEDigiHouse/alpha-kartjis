@@ -3,4 +3,5 @@ export interface IPostTicketPayload {
   price: number;
   eventId: string;
   stock?: number;
+  adminFee?: number;
 }
