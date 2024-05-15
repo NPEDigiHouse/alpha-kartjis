@@ -1,10 +1,33 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { IPostTicketPayload } from "../utils/interface/ticket";
+import {
+  IPostTicketPayload,
+  IPutTicketPayload,
+} from "../utils/interface/ticket";
 import { BadRequestError } from "../exceptions/BadRequestError";
 import { InternalServerError } from "../exceptions/InternalError";
 import db from "../database";
 
 export class Ticket {
+  async updateTicketById(ticketId: string, payload: IPutTicketPayload) {
+    try {
+      return await db.ticket.update({
+        where: { id: ticketId },
+        data: {
+          adminFee: payload.adminFee,
+          name: payload.name,
+          price: payload.price,
+          stock: payload.stock,
+        },
+      });
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new BadRequestError(error.message);
+      } else if (error instanceof Error) {
+        throw new InternalServerError(error.message);
+      }
+    }
+  }
+
   async reduceTicketBasedOnQuantityBought(
     ticketId: string | null,
     quantity: number,
@@ -52,6 +75,7 @@ export class Ticket {
           name: payload.name,
           price: payload.price,
           stock: payload.stock,
+          adminFee: payload.adminFee,
         },
       });
     } catch (error) {

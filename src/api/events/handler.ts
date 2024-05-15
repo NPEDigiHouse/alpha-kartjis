@@ -6,7 +6,10 @@ import {
   IPostEventPayload,
   IPutEventPayload,
 } from "../../utils/interface/event";
-import { IPostTicketPayload } from "../../utils/interface/ticket";
+import {
+  IPostTicketPayload,
+  IPutTicketPayload,
+} from "../../utils/interface/ticket";
 import { TicketPayloadValidator } from "../../validator/tickets";
 import { TicketService } from "../../services/database/ticket";
 import { IPutTicketPurchasementPayload } from "../../utils/interface/misc/ticketEvent";
@@ -35,6 +38,24 @@ export class EventHandler {
     this.postTickets = this.postTickets.bind(this);
     this.putTickets = this.putTickets.bind(this);
     this.putEvent = this.putEvent.bind(this);
+    this.putTicket = this.putTicket.bind(this);
+  }
+
+  async putTicket(req: Request, res: Response, next: NextFunction) {
+    const { ticketId } = req.params;
+
+    try {
+      const payload = req.body as IPutTicketPayload;
+      this.ticketValidator.validatePutPayload(payload);
+
+      const ticket = await this.ticketService.updateTicket(ticketId, payload);
+
+      return res
+        .status(200)
+        .json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, ticket));
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async putEvent(req: Request, res: Response, next: NextFunction) {
