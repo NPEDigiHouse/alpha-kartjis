@@ -158,11 +158,13 @@ export class CallbackService {
       data.order_id +
         data.status_code +
         data.gross_amount +
-        process.env.MIDTRANS_SERVER_KEY_PRODUCTION,
+        process.env.MIDTRANS_SERVER_KEY,
       "sha512"
     );
 
-    if (challengedSignatureKey !== data.signature_key) {
+    if (data.signature_key && challengedSignatureKey !== data.signature_key) {
+      console.log(data);
+
       // todo: message broker to publish failed payment
       await CallbackService.publishMessageOrderTopic(data.custom_field1, {
         orderId: data.order_id,
