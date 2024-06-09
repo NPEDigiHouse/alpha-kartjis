@@ -158,7 +158,7 @@ export class CallbackService {
       data.order_id +
         data.status_code +
         data.gross_amount +
-        process.env.MIDTRANS_SERVER_KEY,
+        process.env.MIDTRANS_SERVER_KEY_PRODUCTION,
       "sha512"
     );
 
