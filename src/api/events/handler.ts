@@ -122,12 +122,8 @@ export class EventHandler {
     try {
       const payload = req.body as IPostTicketPayload;
       this.ticketValidator.validatePostPayload(payload);
-      const { eventId } = req.params;
 
-      const ticket = await this.ticketService.addNewTicketsForEvent(
-        eventId,
-        payload
-      );
+      const ticket = await this.ticketService.addNewTicketsForEvent(payload);
 
       return res
         .status(201)

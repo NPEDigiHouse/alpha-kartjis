@@ -62,15 +62,11 @@ export class Ticket {
     }
   }
 
-  async addNewTicketByEventId(
-    eventId: string,
-    id: string,
-    payload: IPostTicketPayload
-  ) {
+  async addNewTicketByEventId(id: string, payload: IPostTicketPayload) {
     try {
       return await db.ticket.create({
         data: {
-          eventId,
+          eventId: payload.eventId,
           id,
           name: payload.name,
           price: payload.price,
