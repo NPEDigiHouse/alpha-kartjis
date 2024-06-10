@@ -7,13 +7,13 @@ const main = async () => {
   try {
     const connection = await amqlib.connect("amqp://localhost");
     const channel = await connection.createChannel();
-    const orderTopic = "order_payment_core";
+    const orderTopic = "order_payment";
 
     channel.assertExchange(orderTopic, "topic", {
       durable: true,
     });
 
-    const queue = await channel.assertQueue("order_queue_core", {
+    const queue = await channel.assertQueue("order_queue", {
       durable: true,
     });
 
