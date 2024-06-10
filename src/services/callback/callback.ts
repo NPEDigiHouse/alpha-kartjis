@@ -162,7 +162,9 @@ export class CallbackService {
       "sha512"
     );
 
-    if (challengedSignatureKey !== data.signature_key) {
+    if (data.signature_key && challengedSignatureKey !== data.signature_key) {
+      console.log(data);
+
       // todo: message broker to publish failed payment
       await CallbackService.publishMessageOrderTopic(data.custom_field1, {
         orderId: data.order_id,

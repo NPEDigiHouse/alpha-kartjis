@@ -18,17 +18,23 @@ export class EventRouter {
       .route(this.path)
       .get(this.handler.getEvents)
       .post(this.handler.postEvents);
-    // * /events/:{eventId}
-    this.router.route(this.path + "/:eventId").get(this.handler.getEvent);
+    this.router.route(this.path + "/tickets").post(this.handler.postTickets);
+    this.router
+      .route(this.path + "/tickets/:ticketId")
+      .put(this.handler.putTicket);
+    // * /events/:{eventId
+    this.router
+      .route(this.path + "/:eventId")
+      .get(this.handler.getEvent)
+      .put(this.handler.putEvent);
     // * /events/:{eventId}/tickets
     this.router
       .route(this.path + "/:eventId/tickets")
       .get(this.handler.getTickets)
-      .post(this.handler.postTickets)
       .put(this.handler.putTickets);
     // * /events/:{eventId}/tickets/{ticketId}
     this.router
-      .route(this.path + "/:eventId/tickets")
+      .route(this.path + "/:eventId/tickets/:ticketId")
       .get(this.handler.getTicket);
 
     return this.router;

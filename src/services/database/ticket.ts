@@ -1,5 +1,8 @@
 import { Ticket } from "../../models/Ticket";
-import { IPostTicketPayload } from "../../utils/interface/ticket";
+import {
+  IPostTicketPayload,
+  IPutTicketPayload,
+} from "../../utils/interface/ticket";
 import { v4 as uuidv4 } from "uuid";
 
 export class TicketService {
@@ -7,6 +10,10 @@ export class TicketService {
 
   constructor() {
     this.model = new Ticket();
+  }
+
+  async updateTicket(ticketId: string, payload: IPutTicketPayload) {
+    return await this.model.updateTicketById(ticketId, payload);
   }
 
   async addNewTicketsForEvent(eventId: string, payload: IPostTicketPayload) {

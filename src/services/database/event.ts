@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import { NotFoundError } from "../..//exceptions/NotFoundError";
 import { Event } from "../../models/Event";
-import { IPostEventPayload } from "../../utils/interface/event";
+import {
+  IPostEventPayload,
+  IPutEventPayload,
+} from "../../utils/interface/event";
 import { EventDetailMapper, ListEventMapper } from "../../utils/dto/event";
 
 export class EventService {
@@ -9,6 +12,10 @@ export class EventService {
 
   constructor() {
     this.model = new Event();
+  }
+
+  async updateEventById(eventId: string, payload: IPutEventPayload) {
+    return await this.model.updateEventById(eventId, payload);
   }
 
   async getAllEvents() {

@@ -2,8 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import { EventService } from "../../services/database/event";
 import { constants, createResponse } from "../../utils";
 import { EventPayloadValidator } from "../../validator/events";
-import { IPostEventPayload } from "../../utils/interface/event";
-import { IPostTicketPayload } from "../../utils/interface/ticket";
+import {
+  IPostEventPayload,
+  IPutEventPayload,
+} from "../../utils/interface/event";
+import {
+  IPostTicketPayload,
+  IPutTicketPayload,
+} from "../../utils/interface/ticket";
 import { TicketPayloadValidator } from "../../validator/tickets";
 import { TicketService } from "../../services/database/ticket";
 import { IPutTicketPurchasementPayload } from "../../utils/interface/misc/ticketEvent";
@@ -31,6 +37,42 @@ export class EventHandler {
     this.postEvents = this.postEvents.bind(this);
     this.postTickets = this.postTickets.bind(this);
     this.putTickets = this.putTickets.bind(this);
+    this.putEvent = this.putEvent.bind(this);
+    this.putTicket = this.putTicket.bind(this);
+  }
+
+  async putTicket(req: Request, res: Response, next: NextFunction) {
+    const { ticketId } = req.params;
+
+    try {
+      const payload = req.body as IPutTicketPayload;
+      this.ticketValidator.validatePutPayload(payload);
+
+      const ticket = await this.ticketService.updateTicket(ticketId, payload);
+
+      return res
+        .status(200)
+        .json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, ticket));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async putEvent(req: Request, res: Response, next: NextFunction) {
+    const { eventId } = req.params;
+
+    try {
+      const payload = req.body as IPutEventPayload;
+      this.eventValidator.validatePutPayload(payload);
+
+      const event = await this.eventService.updateEventById(eventId, payload);
+
+      return res
+        .status(200)
+        .json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, event));
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getEvents(req: Request, res: Response, next: NextFunction) {
