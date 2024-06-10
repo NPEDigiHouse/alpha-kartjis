@@ -16,9 +16,9 @@ export class TicketService {
     return await this.model.updateTicketById(ticketId, payload);
   }
 
-  async addNewTicketsForEvent(eventId: string, payload: IPostTicketPayload) {
+  async addNewTicketsForEvent(payload: IPostTicketPayload) {
     const id = uuidv4();
 
-    return await this.model.addNewTicketByEventId(eventId, id, payload);
+    return await this.model.addNewTicketByEventId(id, payload);
   }
 }
