@@ -1,3 +1,3 @@
 export interface IPostCategoryPayload {
-  name: string;
+    name: string;
 }
