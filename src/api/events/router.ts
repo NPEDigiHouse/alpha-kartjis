@@ -26,7 +26,8 @@ export class EventRouter {
     this.router
       .route(this.path + "/:eventId")
       .get(this.handler.getEvent)
-      .put(this.handler.putEvent);
+      .put(this.handler.putEvent)
+      .delete(this.handler.deleteEvent)
     // * /events/:{eventId}/tickets
     this.router
       .route(this.path + "/:eventId/tickets")

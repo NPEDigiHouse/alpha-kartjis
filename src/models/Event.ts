@@ -112,4 +112,12 @@ export class Event {
       },
     });
   }
+
+  async deleteEventById(eventId:string) {
+    const deletedEvents = await db.event.delete({
+      where: {id: eventId}
+    })
+
+    return deletedEvents
+  }
 }

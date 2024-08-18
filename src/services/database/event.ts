@@ -14,6 +14,10 @@ export class EventService {
     this.model = new Event();
   }
 
+  async deleteEventById(eventId: string) {
+    return await this.model.deleteEventById(eventId)
+  }
+
   async updateEventById(eventId: string, payload: IPutEventPayload) {
     return await this.model.updateEventById(eventId, payload);
   }
