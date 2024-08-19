@@ -21,4 +21,8 @@ export class TicketService {
 
     return await this.model.addNewTicketByEventId(id, payload);
   }
+
+  async deleteTicketById(ticketId: string) {
+    return await this.model.deleteTicketById(ticketId)
+  }
 }

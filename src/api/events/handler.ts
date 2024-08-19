@@ -114,6 +114,25 @@ export class EventHandler {
         }
     }
 
+    async deleteTicket(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { eventId, ticketId } = req.params;
+
+            const deletedTicket = await this.ticketService.deleteTicketById(
+                ticketId
+            );
+
+            return res
+                .status(200)
+                .json({
+                    message: 'Record deleted successfully',
+                    deletedTicket,
+                });
+        } catch (error) {
+            return next(error);
+        }
+    }
+
     async getEvent(req: Request, res: Response, next: NextFunction) {
         try {
             const { eventId } = req.params;
