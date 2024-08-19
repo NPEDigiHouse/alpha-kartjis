@@ -3,7 +3,7 @@ import {
   IPostEventPayload,
   IPutEventPayload,
 } from "../../utils/interface/event";
-import { EventPayloadSchema } from "./schema";
+import { EventPayloadPutSchema, EventPayloadSchema } from "./schema";
 
 export class EventPayloadValidator {
   validatePostPayload(payload: IPostEventPayload) {
@@ -15,7 +15,7 @@ export class EventPayloadValidator {
   }
 
   validatePutPayload(payload: IPutEventPayload) {
-    const validationResult = EventPayloadSchema.validate(payload);
+    const validationResult = EventPayloadPutSchema.validate(payload);
 
     if (validationResult.error) {
       throw new BadRequestError(validationResult.error.message);
