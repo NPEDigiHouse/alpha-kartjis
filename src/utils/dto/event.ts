@@ -22,6 +22,13 @@ interface IEventDetailDTO {
   description?: string;
   tickets?: Ticket[];
   quota: number;
+  bankName?: string;
+  bankAccountNumber?: string;
+  bankAccountName?: string;
+  commiteeName?: string;
+  commiteeEmail?: string;
+  commiteeEOName?: string;
+  commiteePhoneNumber?: string;
 }
 
 export const ListEventMapper = (
@@ -73,6 +80,13 @@ export const EventDetailMapper = (
       stock: ticket.stock,
       adminFee: ticket.adminFee,
     })),
+    bankName: data.paymentBankName,
+    bankAccountName: data.paymentAccountName,
+    bankAccountNumber: data.paymentAccountNumber,
+    commiteeName: data.commiteeName,
+    commiteeEmail: data.commiteeEmail,
+    commiteeEOName: data.commiteeEOName,
+    commiteePhoneNumber: data.commiteePhoneNumber,
     schedules,
     quota,
   } as IEventDetailDTO;
