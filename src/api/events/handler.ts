@@ -40,6 +40,7 @@ export class EventHandler {
         this.putEvent = this.putEvent.bind(this);
         this.putTicket = this.putTicket.bind(this);
         this.deleteEvent = this.deleteEvent.bind(this);
+        this.deleteTicket = this.deleteTicket.bind(this)
     }
 
     async putTicket(req: Request, res: Response, next: NextFunction) {
