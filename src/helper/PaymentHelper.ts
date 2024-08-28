@@ -11,6 +11,7 @@ export class PaymentHelper {
 
   async createBill(orderId: string, amount: number) {
     try {
+console.log("orderid" + orderId + config.config().MIDTRANS_SNAP_URL)
       const response = await axios.post(
         config.config().MIDTRANS_SNAP_URL ?? "",
         {

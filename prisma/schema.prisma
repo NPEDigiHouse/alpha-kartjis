@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,9 +10,12 @@ datasource db {
 model Event {
   id                   String     @id
   name                 String     @db.VarChar(255)
-  location             String     @db.VarChar(255)
   description          String?    @db.Text
+  location             String     @db.VarChar(255)
   thumbnailURI         String?    @db.VarChar(255)
+  schedules            Json
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
   paymentBankName      String?    @db.VarChar(100)
   paymentAccountNumber String?    @db.VarChar(50)
   paymentAccountName   String?    @db.VarChar(255)
@@ -23,12 +23,9 @@ model Event {
   commiteeEmail        String?    @db.VarChar(255)
   commiteeEOName       String?    @db.VarChar(255)
   commiteePhoneNumber  String?    @db.VarChar(15)
-  categories           Category[]
-  schedules            Json
-  tickets              Ticket[]
   orders               Order[]
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
+  tickets              Ticket[]
+  categories           Category[] @relation("CategoryToEvent")
 
   @@map("events")
 }
@@ -36,10 +33,10 @@ model Event {
 model Category {
   id        String   @id
   name      String   @db.VarChar(100)
-  events    Event[]
   eventId   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  events    Event[]  @relation("CategoryToEvent")
 
   @@map("categories")
 }
@@ -48,14 +45,15 @@ model Ticket {
   id        String        @id
   name      String
   price     Int           @db.UnsignedInt
-  adminFee  Int?          @db.UnsignedInt
-  Event     Event?        @relation(fields: [eventId], references: [id])
   eventId   String?
-  orders    OrderDetail[]
   stock     Int           @default(0) @db.UnsignedInt
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  adminFee  Int?          @db.UnsignedInt
+  orders    OrderDetail[]
+  Event     Event?        @relation(fields: [eventId], references: [id])
 
+  @@index([eventId], map: "tickets_eventId_fkey")
   @@map("tickets")
 }
 
@@ -63,52 +61,57 @@ model Customer {
   id          String   @id
   name        String?  @db.VarChar(255)
   email       String   @db.VarChar(255)
-  birthDate   Int?     @db.Int
+  birthDate   Int?
   phoneNumber String?
   gender      Gender
-  orders      Order[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  orders      Order[]
 
   @@map("customers")
 }
 
 model OrderDetail {
   id                 String              @id
-  Ticket             Ticket?             @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ticketId           String?
   quantity           Int                 @default(1)
-  Order              Order?              @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId            String?
   name               String?             @db.VarChar(255)
   email              String              @db.VarChar(255)
-  birthDate          Int?                @db.Int
+  birthDate          Int?
   phoneNumber        String?
   gender             Gender
   address            String?             @db.VarChar(255)
   socialMedia        String?             @db.VarChar(255)
   location           String?             @db.VarChar(255)
+  commiteeName       String?             @db.VarChar(255)
   TicketVerification TicketVerification?
+  Order              Order?              @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  Ticket             Ticket?             @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
+  @@index([orderId], map: "orderDetails_orderId_fkey")
+  @@index([ticketId], map: "orderDetails_ticketId_fkey")
   @@map("orderDetails")
 }
 
 model Order {
   id           String        @id
   status       PaymentStatus @default(INPROCESS)
-  orderDetails OrderDetail[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  Customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   customerId   String?
-  Event        Event?        @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   billId       Int?          @unique @db.UnsignedInt
+  paymentId    String?       @db.VarChar(255)
+  eventId      String?
   billLink     String?       @db.VarChar(255)
   billToken    String?       @db.VarChar(255)
-  paymentId    String?       @db.VarChar(255)
   paymentType  String?       @db.VarChar(100)
-  eventId      String?
+  orderDetails OrderDetail[]
+  Customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  Event        Event?        @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
+  @@index([customerId], map: "orders_customerId_fkey")
+  @@index([eventId], map: "orders_eventId_fkey")
   @@map("orders")
 }
 
@@ -116,20 +119,10 @@ model TicketVerification {
   id            String      @id
   hash          String      @unique
   isScanned     Boolean     @default(false)
-  OrderDetail   OrderDetail @relation(fields: [orderDetailId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   orderDetailId String      @unique
-}
-
-enum Day {
-  SUNDAY
-  MONDAY
-  TUESDAY
-  WEDNESDAY
-  THURSDAY
-  FRIDAY
-  SATURDAY
+  OrderDetail   OrderDetail @relation(fields: [orderDetailId], references: [id], onDelete: Cascade)
 }
 
 enum Gender {
