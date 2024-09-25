@@ -10,19 +10,19 @@ html
             div.ticket-container
                 .content 
                     .ticket-logo 
-                        img(src="https://sds.kartjis.id/api/uploaded-file/icon-kartjis.png", alt="logo")
+                        img(src="https://storage.kartjis.id/public-images/kartjis-logo.png", alt="logo")
                     .ticket-title 
-                        h1 Yay, kamu berhasil mendapatkan tiket! 
+                        h1 Yay, kamu berhasil mendapatkan kartjis! 
                         
                     .ticket-salutation
                         p 
                             | 
                             | Halo 
                             span.customer-name #{name}
-                        p Terima kasih sudah memesan tiket "#{ticketName}" di Kartjis 
+                        p Terima kasih sudah memesan kartjis "#{ticketName}" di Kartjis 
                     
                     .ticket-more-info 
-                        p Proses pemesanan dan pembayaran kamu telah kami terima. Tiket untuk event ini sudah kami terbitkan.
+                        p Proses pemesanan dan pembayaran kamu telah kami terima. Kartjis untuk event ini sudah kami terbitkan.
 
                     .ticket-detail 
                         table.tabel-style 
@@ -39,9 +39,9 @@ html
                                 td.table-data-style Metode Pembayaran 
                                 td.table-data-style #{paymentMethod}
                             tr
-                                td.table-data-style Link Tiket 
+                                td.table-data-style Link Kartjis 
                                 td.table-data-style
                                     span.link
                                         a(href=`${redirectLink}`)  #{redirectLink}
                     .button-part 
-                        a(href=`${redirectLink}`)   Lihat E-Ticket 
+                        a(href=`${redirectLink}`)   Lihat E-Kartjis 
