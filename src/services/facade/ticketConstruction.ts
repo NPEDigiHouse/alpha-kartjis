@@ -68,7 +68,7 @@ export class TicketConstruction {
       const emailBody = {
         from: config.config().KARTJIS_MAIL,
         to: orderDetail.email,
-        subject: `E-Tiket [${order.Event?.name}] - ${orderDetail.name}`,
+        subject: `E-Kartjis [${order.Event?.name}] - ${orderDetail.name}`,
         // html: `<a href="${clientUrl}">${clientUrl}</a>`,
         html: pug.compileFile(
           path.join(__dirname, "..", "..", "..", "views/email.pug")
