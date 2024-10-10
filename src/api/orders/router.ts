@@ -13,6 +13,7 @@ export class OrderRouter {
   }
 
   register() {
+
     // * /orders
     // * PUT method is just for testing only
     this.router
@@ -20,10 +21,14 @@ export class OrderRouter {
       .get(this.handler.getOrderDetail)
       .put(this.handler.putOrder);
 
+    // * resend email to list of orders
+    this.router.route(this.path + "/:orderId/emails").post(this.handler.postEmailOrders)
+
     // * get order details from order id
     this.router
       .route(this.path + "/:orderId/order-details")
       .get(this.handler.getOrderOrderDetails);
+
     return this.router;
   }
 }
