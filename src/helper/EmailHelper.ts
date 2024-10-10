@@ -46,22 +46,22 @@ export class EmailHelper {
 
     constructor() {
         // Create a transport object using SMTP for Gmail
-        // this.transporter = nodemailer.createTransport({
-        //   service: "gmail",
-        //   auth: {
-        //     user: config.config().KARTJIS_MAIL, // Your Gmail email address
-        //     pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
-        //   },
-        // });
-
         this.transporter = nodemailer.createTransport({
-            host: 'smtp.hostinger.com',
-            port: 465,
+            service: 'gmail',
             auth: {
                 user: config.config().KARTJIS_MAIL, // Your Gmail email address
                 pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
             },
         });
+
+        // this.transporter = nodemailer.createTransport({
+        //     host: 'smtp.hostinger.com',
+        //     port: 465,
+        //     auth: {
+        //         user: config.config().KARTJIS_MAIL, // Your Gmail email address
+        //         pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
+        //     },
+        // });
 
         // ** ini buat hostinger
         // this.transporter = nodemailer.createTransport({
