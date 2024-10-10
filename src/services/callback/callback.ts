@@ -54,6 +54,9 @@ export class CallbackService {
       "sha512"
     );
 
+   console.log("challengedSignatureKey" + challengedSignatureKey);
+   console.log("signatureKey" + data.signature_key);
+
     if (challengedSignatureKey !== data.signature_key) {
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,
