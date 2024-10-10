@@ -5,6 +5,7 @@ import { PaymentService } from "../../services/facade/payment";
 import { OrderDetailService } from "../../services/database/orderDetail";
 
 export class OrderHandler {
+  
   private orderService: OrderService;
   private paymentService: PaymentService;
   private orderDetailService: OrderDetailService;
@@ -17,6 +18,21 @@ export class OrderHandler {
     this.getOrderDetail = this.getOrderDetail.bind(this);
     this.putOrder = this.putOrder.bind(this);
     this.getOrderOrderDetails = this.getOrderOrderDetails.bind(this);
+    this.postEmailOrders = this.postEmailOrders.bind(this)
+  }
+
+  async postEmailOrders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { orderId } = req.params;
+
+      await this.orderService.sendEmailToOder(orderId);
+
+      return res
+        .status(200)
+        .json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, "successfully resend email"));
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getOrderOrderDetails(req: Request, res: Response, next: NextFunction) {

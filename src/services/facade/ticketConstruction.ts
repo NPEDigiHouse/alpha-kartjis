@@ -82,7 +82,9 @@ export class TicketConstruction {
         }),
         text: "",
       };
-      this.emailHelper.sendEmail(emailBody);
+      setTimeout(() => {
+        this.emailHelper.sendEmail(emailBody);
+      }, 5 * 60 * 1000);
     }
   }
 }
