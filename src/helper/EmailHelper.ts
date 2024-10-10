@@ -88,10 +88,10 @@ export class EmailHelper {
           body: 'Backup successful 😀'
         })
         const failedMessage = `Failed send email to ${emailBody.to}, ${emailBody.subject}. Error: ${error}`
-        axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
+        await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
       } else {
         const successMessage = `Successfully send email to ${emailBody.to}, ${emailBody.subject}`
-        axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+        await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
       }
       // ** ini buat hostinger
       // else {
