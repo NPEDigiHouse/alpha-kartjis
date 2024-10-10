@@ -4,6 +4,7 @@ import { config } from "../config";
 import fs from 'fs';
 import path from 'path';
 import { ImapFlow } from 'imapflow';
+import axios from "axios";
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ export class EmailHelper {
       },
     });
     
+    
     // ** ini buat hostinger
     // this.transporter = nodemailer.createTransport({
     //   host: "smtp.hostinger.com",
@@ -81,7 +83,16 @@ export class EmailHelper {
       if (error) {
         console.error("Error sending email:", error);
         logErrorToFile(emailBody.to, error)
-      } 
+        fetch('https://ntfy.sh/mytopic', {
+          method: 'POST', // PUT works too
+          body: 'Backup successful 😀'
+        })
+        const failedMessage = `Failed send email to ${emailBody.to}, ${emailBody.subject}. Error: ${error}`
+        axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
+      } else {
+        const successMessage = `Successfully send email to ${emailBody.to}, ${emailBody.subject}`
+        axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+      }
       // ** ini buat hostinger
       // else {
       //   try {
