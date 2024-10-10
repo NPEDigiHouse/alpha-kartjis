@@ -48,7 +48,7 @@ export class OrderService {
             const emailHelper = new EmailHelper();
             setTimeout(() => {
                 emailHelper.sendEmail(emailBody);
-            }, 5 * 60 * 1000);
+            }, (Math.floor(Math.random() * (10 - 1 + 1)) + 1) * 60 * 1000);
             // emailHelper.sendEmail(emailBody);
         });
     }
