@@ -36,6 +36,9 @@ ol, ul {
 blockquote, q {
 	quotes: none;
 }
+p, span {
+    color: #000000;
+}
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
@@ -165,4 +168,34 @@ table tr td{
 
 .link a{
     text-decoration: none;
+}
+
+.company-info{
+    margin-top: 40px;
+}
+
+.company-info p{
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.8;
+}
+
+#company-name{
+    font-size: 16px;
+    font-weight: 700;
+    color: #313131;
+}
+
+.company-contact{
+    margin-top: 10px;
+}
+
+.company-contact p{
+    text-align: center;
+}
+
+.company-contact a{
+    text-decoration: none;
+    display: inline-block;
+    margin-left: 4px;
 }
