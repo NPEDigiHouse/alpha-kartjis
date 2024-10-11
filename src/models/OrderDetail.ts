@@ -26,7 +26,7 @@ export class OrderDetail {
     });
   }
 
-  async getOrderDetails(eventId: string, page: number = 1) {
+  async getOrderDetails(eventId: string, page?: number) {
     return db.orderDetail.findMany({
       where: {
         Order: {
@@ -57,8 +57,9 @@ export class OrderDetail {
           },
         },
       },
-      take: 20,
-      skip: (page - 1) * 20,
+      // take: 20,
+      // skip: (page - 1) * 20,
+      ...(page ? { take: 20, skip: (page - 1) * 20 } : {}),
     });
   }
 
@@ -92,40 +93,6 @@ export class OrderDetail {
           select: {
             name: true,
             price: true,
-          },
-        },
-      },
-    });
-  }
-
-  async getOrderDetailByEventId(eventId: string) {
-    return db.orderDetail.findMany({
-      where: {
-        Order: {
-          eventId,
-          status: 'SUCCESS',
-        },
-      },
-      select: {
-        location: true,
-        birthDate: true,
-        email: true,
-        gender: true,
-        name: true,
-        phoneNumber: true,
-        address: true,
-        socialMedia: true,
-        Order: {
-          select: {
-            id: true,
-            createdAt: true,
-            updatedAt: true,
-            paymentType: true,
-          },
-        },
-        Ticket: {
-          select: {
-            name: true,
           },
         },
       },

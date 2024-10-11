@@ -23,10 +23,6 @@ export class OrderDetailRouter {
       .get(this.handler.getOrderDetails);
 
     this.router
-      .route(this.path + '/:eventId/event-data')
-      .get(this.handler.getOrderDetailByEvent);
-
-    this.router
       .route(this.path + '/:eventId/offline-channel')
       .get(this.handler.getOfflineTicket);
 

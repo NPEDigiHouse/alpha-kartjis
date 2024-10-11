@@ -33,10 +33,6 @@ export class OrderDetailService {
     return this.model.getOrderDetails(eventId, page);
   }
 
-  async getOrderDetailByEvent(eventId: string) {
-    return this.model.getOrderDetailByEventId(eventId);
-  }
-
   async getOfflineTickets(eventId: string, location: string) {
     return this.model.getOfflineTicketData(eventId, location);
   }

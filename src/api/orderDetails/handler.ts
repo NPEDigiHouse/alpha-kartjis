@@ -10,7 +10,6 @@ export class OrderDetailHandler {
 
     this.getOrderDetailDetail = this.getOrderDetailDetail.bind(this);
     this.getOrderDetails = this.getOrderDetails.bind(this);
-    this.getOrderDetailByEvent = this.getOrderDetailByEvent.bind(this);
     this.getOfflineTicket = this.getOfflineTicket.bind(this);
   }
 
@@ -20,19 +19,8 @@ export class OrderDetailHandler {
 
     const orderDetails = await this.orderDetailService.getOrderDetails(
       eventId,
-      parseInt(String(page ?? '1')),
-    );
-
-    return res.json(
-      createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails),
-    );
-  }
-
-  async getOrderDetailByEvent(req: Request, res: Response, next: NextFunction) {
-    const { eventId } = req.params;
-
-    const orderDetails = await this.orderDetailService.getOrderDetailByEvent(
-      eventId,
+      // parseInt(String(page ?? '1')),
+      page ? Number(page) : undefined,
     );
 
     return res.json(
