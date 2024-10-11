@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { OrderDetailHandler } from "./handler";
+import { Router } from 'express';
+import { OrderDetailHandler } from './handler';
 
 export class OrderDetailRouter {
   handler: OrderDetailHandler;
@@ -7,7 +7,7 @@ export class OrderDetailRouter {
   router: Router;
 
   constructor() {
-    this.path = "/order-details";
+    this.path = '/order-details';
     this.router = Router();
     this.handler = new OrderDetailHandler();
   }
@@ -15,12 +15,21 @@ export class OrderDetailRouter {
   register() {
     // * /orders
     this.router
-      .route(this.path + "/:orderDetailId")
+      .route(this.path + '/:orderDetailId')
       .get(this.handler.getOrderDetailDetail);
 
     this.router
-      .route(this.path + "/master/:eventId")
+      .route(this.path + '/master/:eventId')
       .get(this.handler.getOrderDetails);
+
+    this.router
+      .route(this.path + '/:eventId/event-data')
+      .get(this.handler.getOrderDetailByEvent);
+
+    this.router
+      .route(this.path + '/:eventId/offline-channel')
+      .get(this.handler.getOfflineTicket);
+
     return this.router;
   }
 }
