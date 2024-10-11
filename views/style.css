@@ -160,15 +160,6 @@ table tr td{
     border-radius: 4px;
     /* box-shadow: 3px 3px 0px #FEAD11; */
 }
-.link{
-    display: block;
-    max-width: 200px;
-    word-wrap: break-word;
-}
-
-.link a{
-    text-decoration: none;
-}
 
 .company-info{
     margin-top: 40px;
