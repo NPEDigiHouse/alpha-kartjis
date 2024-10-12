@@ -6,6 +6,7 @@ import { Order } from '../../models/Order';
 import { OrderDetailMapper } from '../../utils/dto/order';
 import pug from 'pug';
 import path from 'path';
+import { TicketConstruction } from '../facade/ticketConstruction';
 
 export class OrderService {
     model: Order;
@@ -25,32 +26,35 @@ export class OrderService {
             throw new BadRequestError('order has not been paid');
         }
 
-        order?.orderDetails.forEach((od) => {
-            const clientUrl = `https://kartjis.id/my-ticket/info/${od.id}`;
-            const emailBody = {
-                from: config.config().KARTJIS_MAIL,
-                to: od.email,
-                subject: `E-Kartjis [${order.Event?.name}] - ${od.name}`,
-                // html: `<a href="${clientUrl}">${clientUrl}</a>`,
-                html: pug.compileFile(
-                    path.join(__dirname, '..', '..', '..', 'views/email.pug')
-                )({
-                    name: od.name,
-                    ticketName: od.Ticket?.name,
-                    orderNumber: order.id,
-                    orderDate: new Date(order.createdAt),
-                    paymentMethod: 'other',
-                    redirectLink: clientUrl,
-                }),
-                text: '',
-            };
+        const ticketConstruction = new TicketConstruction();
+        await ticketConstruction.composeTicket(order, 'other');
 
-            const emailHelper = new EmailHelper();
-            setTimeout(() => {
-                emailHelper.sendEmail(emailBody);
-            }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
-            // emailHelper.sendEmail(emailBody);
-        });
+        // order?.orderDetails.forEach((od) => {
+        //   const clientUrl = `https://kartjis.id/my-ticket/info/${od.id}`;
+        //   const emailBody = {
+        //     from: config.config().KARTJIS_MAIL,
+        //     to: od.email,
+        //     subject: `E-Tiket [${order.Event?.name}] - ${od.name}`,
+        //     // html: `<a href="${clientUrl}">${clientUrl}</a>`,
+        //     html: pug.compileFile(
+        //       path.join(__dirname, "..", "..", "..", "views/email.pug")
+        //     )({
+        //       name: od.name,
+        //       ticketName: od.Ticket?.name,
+        //       orderNumber: order.id,
+        //       orderDate: new Date(order.createdAt),
+        //       paymentMethod: "other",
+        //       redirectLink: clientUrl,
+        //     }),
+        //     text: "",
+        //   };
+
+        //   const emailHelper = new EmailHelper();
+        //   setTimeout(() => {
+        //     emailHelper.sendEmail(emailBody);
+        //   }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        //   // emailHelper.sendEmail(emailBody);
+        // });
     }
 
     async getOrderDetail(orderId: string) {
