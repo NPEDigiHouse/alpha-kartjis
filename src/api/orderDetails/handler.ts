@@ -14,18 +14,22 @@ export class OrderDetailHandler {
   }
 
   async getOrderDetails(req: Request, res: Response, next: NextFunction) {
-    const { eventId } = req.params;
-    const { page } = req.query;
+    try {
+      const { eventId } = req.params;
+      const { page } = req.query;
 
-    const orderDetails = await this.orderDetailService.getOrderDetails(
-      eventId,
-      // parseInt(String(page ?? '1')),
-      page ? Number(page) : undefined,
-    );
+      const orderDetails = await this.orderDetailService.getOrderDetails(
+        eventId,
+        // parseInt(String(page ?? '1')),
+        page ? Number(page) : undefined,
+      );
 
-    return res.json(
-      createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails),
-    );
+      return res.json(
+        createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails),
+      );
+    } catch (error) {
+      return next(error);
+    }
   }
 
   async getOfflineTicket(req: Request, res: Response, next: NextFunction) {
