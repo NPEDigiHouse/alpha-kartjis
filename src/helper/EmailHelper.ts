@@ -40,38 +40,38 @@ function logErrorToFile(email: string, error: Error): void {
 export class EmailHelper {
   transporter: nodemailer.Transporter;
   // ** ini buat hostinger
-  // imapClient: ImapFlow
+  imapClient: ImapFlow
 
   constructor() {
     // Create a transport object using SMTP for Gmail
-    this.transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: config.config().KARTJIS_MAIL, // Your Gmail email address
-        pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
-      },
-    });
-    
-    
-    // ** ini buat hostinger
     // this.transporter = nodemailer.createTransport({
-    //   host: "smtp.hostinger.com",
-    //   port: 465,
+    //   service: "gmail",
     //   auth: {
     //     user: config.config().KARTJIS_MAIL, // Your Gmail email address
     //     pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
     //   },
     // });
+    
+    
+    // ** ini buat hostinger
+    this.transporter = nodemailer.createTransport({
+      host: "smtp.hostinger.com",
+      port: 465,
+      auth: {
+        user: config.config().KARTJIS_MAIL, // Your Gmail email address
+        pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
+      },
+    });
 
-    // this.imapClient = new ImapFlow({
-    //   host: 'imap.hostinger.com', // Your IMAP server
-    //   port: 993, // IMAP port (usually 993 for TLS)
-    //   secure: true,
-    //   auth: {
-    //     user: config.config().KARTJIS_MAIL ?? "", // Your Gmail email address
-    //     pass: config.config().KARTJIS_PASSWORD ?? "", // Your Gmail email password
-    //   },
-    // });
+    this.imapClient = new ImapFlow({
+      host: 'imap.hostinger.com', // Your IMAP server
+      port: 993, // IMAP port (usually 993 for TLS)
+      secure: true,
+      auth: {
+        user: config.config().KARTJIS_MAIL ?? "", // Your Gmail email address
+        pass: config.config().KARTJIS_PASSWORD ?? "", // Your Gmail email password
+      },
+    });
     
   }
 
@@ -81,27 +81,30 @@ export class EmailHelper {
       if (error) {
         console.error("Error sending email:", error);
         logErrorToFile(emailBody.to, error)
-        const failedMessage = `Failed send email to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`
+        const failedMessage = `Failed send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`
         await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
-      } else {
-        const successMessage = `Successfully send email to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-        await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
-      }
-      // ** ini buat hostinger
+      } 
       // else {
-      //   try {
-      //     await this.imapClient.connect()
-      //     const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
-      //     // Append the email to the "Sent" folder
-      //     await this.imapClient.append('Sent', message);
-      //     console.log("Email sent:", info.response);
-      //   } catch (error: any) {
-      //     console.error("Error saving mail:", error);
-      //     logErrorToFile(emailBody.to, error)
-      //   } finally {
-      //     await this.imapClient.logout()
-      //   }
+      //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+      //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
       // }
+      // ** ini buat hostinger
+      else {
+        try {
+          await this.imapClient.connect()
+          const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
+          // Append the email to the "Sent" folder
+          await this.imapClient.append('Sent', message);
+          console.log("Email sent:", info.response);
+          const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+          await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+        } catch (error: any) {
+          console.error("Error saving mail:", error);
+          logErrorToFile(emailBody.to, error)
+        } finally {
+          await this.imapClient.logout()
+        }
+      }
     });
   }
 }
