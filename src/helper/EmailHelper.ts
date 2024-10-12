@@ -62,7 +62,7 @@ export class EmailHelper {
         pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
       },
     });
-
+    
     this.imapClient = new ImapFlow({
       host: 'imap.hostinger.com', // Your IMAP server
       port: 993, // IMAP port (usually 993 for TLS)
@@ -73,8 +73,9 @@ export class EmailHelper {
       },
     });
     
+    this.imapClient.connect().then(v => console.log(v))
   }
-
+  
   sendEmail(emailBody: IEmailBody, orderId?: string | null) {
     // Send the email using the transporter
     this.transporter.sendMail(emailBody, async (error, info) => {
@@ -85,13 +86,12 @@ export class EmailHelper {
         await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
       } 
       // else {
-      //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-      //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
-      // }
-      // ** ini buat hostinger
-      else {
-        try {
-          await this.imapClient.connect()
+        //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+        //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+        // }
+        // ** ini buat hostinger
+        else {
+          try {
           const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
           // Append the email to the "Sent" folder
           await this.imapClient.append('Sent', message);
@@ -102,7 +102,6 @@ export class EmailHelper {
           console.error("Error saving mail:", error);
           logErrorToFile(emailBody.to, error)
         } finally {
-          await this.imapClient.logout()
         }
       }
     });
