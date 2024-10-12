@@ -92,6 +92,9 @@ export class EmailHelper {
         // ** ini buat hostinger
         else {
           try {
+          if (!this.imapClient.usable) {
+            await this.imapClient.connect()
+          }
           const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
           // Append the email to the "Sent" folder
           await this.imapClient.append('Sent', message);
@@ -101,7 +104,6 @@ export class EmailHelper {
         } catch (error: any) {
           console.error("Error saving mail:", error);
           logErrorToFile(emailBody.to, error)
-          throw error
         } finally {
         }
       }
