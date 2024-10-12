@@ -23,6 +23,7 @@ export class OrderRouter {
 
     // * resend email to list of orders
     this.router.route(this.path + "/:orderId/emails").post(this.handler.postEmailOrders)
+    .put(this.handler.putEmailOrderPending)
 
     // * get order details from order id
     this.router
