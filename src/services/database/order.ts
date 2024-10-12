@@ -13,10 +13,10 @@ export class OrderService {
   emailHelper: EmailHelper
   ticketConstruction: TicketConstruction
 
-  constructor() {
+  constructor(emailHelper: EmailHelper, ticketConstruction: TicketConstruction) {
     this.model = new Order();
-    this.emailHelper = new EmailHelper();
-    this.ticketConstruction = new TicketConstruction();
+    this.emailHelper = emailHelper
+    this.ticketConstruction = ticketConstruction
   }
 
   async composeTicketPendingOrder(orderId: string) {

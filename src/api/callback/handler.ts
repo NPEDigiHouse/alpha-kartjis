@@ -2,12 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { CallbackService } from "../../services/callback/callback";
 import { constants, createResponse } from "../../utils";
 import { InternalServerError } from "../../exceptions/InternalError";
+import { EmailHelper } from "../../helper/EmailHelper";
 
 export class CallbackHandler {
   callbackService: CallbackService;
 
-  constructor() {
-    this.callbackService = new CallbackService();
+  constructor(emailHelper: EmailHelper) {
+    this.callbackService = new CallbackService(emailHelper);
 
     this.postCallbackPaymentVerification =
       this.postCallbackPaymentVerification.bind(this);

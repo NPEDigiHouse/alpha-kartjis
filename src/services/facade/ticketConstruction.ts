@@ -26,9 +26,9 @@ export class TicketConstruction {
   ticketVerificationModel: TicketVerification;
   emailHelper: EmailHelper;
 
-  constructor() {
+  constructor(emailHelper: EmailHelper) {
     this.ticketVerificationModel = new TicketVerification();
-    this.emailHelper = new EmailHelper();
+    this.emailHelper = emailHelper;
   }
 
   async composeTicket(

@@ -1,15 +1,17 @@
 import { Router } from "express";
 import { OrderHandler } from "./handler";
+import { EmailHelper } from "../../helper/EmailHelper";
+import { TicketConstruction } from "../../services/facade/ticketConstruction";
 
 export class OrderRouter {
   handler: OrderHandler;
   path: string;
   router: Router;
 
-  constructor() {
+  constructor(emailHelper: EmailHelper, ticketConstruction: TicketConstruction) {
     this.path = "/orders";
     this.router = Router();
-    this.handler = new OrderHandler();
+    this.handler = new OrderHandler(emailHelper, ticketConstruction);
   }
 
   register() {

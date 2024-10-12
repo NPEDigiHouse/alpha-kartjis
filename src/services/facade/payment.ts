@@ -23,11 +23,11 @@ export class PaymentService {
   paymentHelper: PaymentHelper;
   ticketConstruction: TicketConstruction
 
-  constructor() {
+  constructor(ticketConstruction: TicketConstruction) {
     this.orderModel = new Order();
     this.ticketVerificationModel = new TicketVerification();
     this.paymentHelper = new PaymentHelper();
-    this.ticketConstruction = new TicketConstruction();
+    this.ticketConstruction = ticketConstruction;
   }
 
   async payOrder(orderId: string) {

@@ -3,6 +3,8 @@ import { OrderService } from "../../services/database/order";
 import { constants, createResponse } from "../../utils";
 import { PaymentService } from "../../services/facade/payment";
 import { OrderDetailService } from "../../services/database/orderDetail";
+import { EmailHelper } from "../../helper/EmailHelper";
+import { TicketConstruction } from "../../services/facade/ticketConstruction";
 
 export class OrderHandler {
   
@@ -10,10 +12,10 @@ export class OrderHandler {
   private paymentService: PaymentService;
   private orderDetailService: OrderDetailService;
 
-  constructor() {
-    this.orderService = new OrderService();
+  constructor(emailHelper: EmailHelper, ticketConstruction: TicketConstruction) {
+    this.orderService = new OrderService(emailHelper, ticketConstruction);
     this.orderDetailService = new OrderDetailService();
-    this.paymentService = new PaymentService();
+    this.paymentService = new PaymentService(ticketConstruction);
 
     this.getOrderDetail = this.getOrderDetail.bind(this);
     this.putOrder = this.putOrder.bind(this);

@@ -7,6 +7,7 @@ import { TicketConstruction } from "../facade/ticketConstruction";
 import { Ticket } from "../../models/Ticket";
 import amqlib from "amqplib";
 import dotenv from "dotenv";
+import { EmailHelper } from "../../helper/EmailHelper";
 
 dotenv.config();
 
@@ -16,10 +17,10 @@ export class CallbackService {
   ticketModel: Ticket;
   ticketConstruction: TicketConstruction;
 
-  constructor() {
+  constructor(emailHelper: EmailHelper) {
     this.orderModel = new Order();
     this.ticketVerificationModel = new TicketVerification();
-    this.ticketConstruction = new TicketConstruction();
+    this.ticketConstruction = new TicketConstruction(emailHelper);
     this.ticketModel = new Ticket();
   }
 

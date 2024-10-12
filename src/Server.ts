@@ -10,6 +10,8 @@ import { OrderDetailRouter } from "./api/orderDetails/router";
 import { TicketVerificationRouter } from "./api/ticketVerification/router";
 import { CallbackRouter } from "./api/callback/router";
 import { StatsRouter } from "./api/stats/router";
+import { EmailHelper } from "./helper/EmailHelper";
+import { TicketConstruction } from "./services/facade/ticketConstruction";
 
 dotenv.config();
 
@@ -52,11 +54,13 @@ class Server {
       "/api/uploaded-file",
       express.static(process.env.STATIC_URL ?? "media")
     );
+    const emailHelper = new EmailHelper()
+    const ticketConstruction = new TicketConstruction(emailHelper)
     // * api base route
-    this.app.use("/api", new CallbackRouter().register());
+    this.app.use("/api", new CallbackRouter(emailHelper).register());
     this.app.use("/api", new EventRouter().register());
     this.app.use("/api", new CategoryRouter().register());
-    this.app.use("/api", new OrderRouter().register());
+    this.app.use("/api", new OrderRouter(emailHelper, ticketConstruction).register());
     this.app.use("/api", new OrderDetailRouter().register());
     this.app.use("/api", new TicketVerificationRouter().register());
     this.app.use("/api", new StatsRouter().register());

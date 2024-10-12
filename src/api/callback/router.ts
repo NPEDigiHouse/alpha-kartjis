@@ -1,15 +1,16 @@
 import express, { Router } from "express";
 import { CallbackHandler } from "./handler";
+import { EmailHelper } from "../../helper/EmailHelper";
 
 export class CallbackRouter {
   handler: CallbackHandler;
   path: string;
   router: Router;
 
-  constructor() {
+  constructor(emailHelper: EmailHelper) {
     this.path = "/callback";
     this.router = Router();
-    this.handler = new CallbackHandler();
+    this.handler = new CallbackHandler(emailHelper);
   }
 
   register() {
