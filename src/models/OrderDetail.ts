@@ -1,8 +1,8 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { BadRequestError } from "../exceptions/BadRequestError";
-import { InternalServerError } from "../exceptions/InternalError";
-import { IPutTicketPurchasementPayload } from "../utils/interface/misc/ticketEvent";
-import db from "../database";
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { BadRequestError } from '../exceptions/BadRequestError';
+import { InternalServerError } from '../exceptions/InternalError';
+import { IPutTicketPurchasementPayload } from '../utils/interface/misc/ticketEvent';
+import db from '../database';
 
 export class OrderDetail {
   async getOrderDetailByorderId(orderId: string) {
@@ -21,17 +21,17 @@ export class OrderDetail {
         Ticket: true,
       },
       orderBy: {
-        id: "asc",
+        id: 'asc',
       },
     });
   }
 
-  async getOrderDetails(eventId: string, page: number = 1) {
+  async getOrderDetails(eventId: string, page?: number) {
     return db.orderDetail.findMany({
       where: {
         Order: {
           eventId,
-          status: "SUCCESS",
+          status: 'SUCCESS',
         },
       },
       select: {
@@ -57,15 +57,52 @@ export class OrderDetail {
           },
         },
       },
-      take: 20,
-      skip: (page - 1) * 20,
+      // take: 20,
+      // skip: (page - 1) * 20,
+      ...(page ? { take: 20, skip: (page - 1) * 20 } : {}),
+    });
+  }
+
+  async getOfflineTicketData(eventId: string, location: string) {
+    return db.orderDetail.findMany({
+      where: {
+        Order: {
+          eventId,
+          status: 'SUCCESS',
+        },
+        location,
+      },
+      select: {
+        location: true,
+        birthDate: true,
+        email: true,
+        gender: true,
+        name: true,
+        phoneNumber: true,
+        address: true,
+        socialMedia: true,
+        Order: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            paymentType: true,
+          },
+        },
+        Ticket: {
+          select: {
+            name: true,
+            price: true,
+          },
+        },
+      },
     });
   }
 
   async addNewOrderDetail(
     ids: string[],
     orderId: string,
-    payload: IPutTicketPurchasementPayload
+    payload: IPutTicketPurchasementPayload,
   ) {
     try {
       const data = [];
