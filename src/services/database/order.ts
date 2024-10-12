@@ -10,9 +10,13 @@ import { TicketConstruction } from "../facade/ticketConstruction";
 
 export class OrderService {
   model: Order;
+  emailHelper: EmailHelper
+  ticketConstruction: TicketConstruction
 
   constructor() {
     this.model = new Order();
+    this.emailHelper = new EmailHelper();
+    this.ticketConstruction = new TicketConstruction();
   }
 
   async composeTicketPendingOrder(orderId: string) {
@@ -21,10 +25,10 @@ export class OrderService {
       true
     );
 
-    const ticketConstruction = new TicketConstruction();
+    
 
     if (order) {
-      await ticketConstruction.composeTicket(order, "qris");
+      await this.ticketConstruction.composeTicket(order, "qris");
 
       //   for (let i = 0; i < order.orderDetails.length; i++) {
       //     await this.ticketModel.reduceTicketBasedOnQuantityBought(
@@ -74,9 +78,9 @@ export class OrderService {
         };
 
         uniqueEmail.push(orderDetail.email)
-        const emailHelper = new EmailHelper();
+        
         setTimeout(() => {
-          emailHelper.sendEmail(emailBody, orderDetail.orderId);
+          this.emailHelper.sendEmail(emailBody, orderDetail.orderId);
         }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
       }
 

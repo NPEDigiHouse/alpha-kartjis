@@ -21,11 +21,13 @@ export class PaymentService {
   orderModel: Order;
   ticketVerificationModel: TicketVerification;
   paymentHelper: PaymentHelper;
+  ticketConstruction: TicketConstruction
 
   constructor() {
     this.orderModel = new Order();
     this.ticketVerificationModel = new TicketVerification();
     this.paymentHelper = new PaymentHelper();
+    this.ticketConstruction = new TicketConstruction();
   }
 
   async payOrder(orderId: string) {
@@ -84,8 +86,7 @@ export class PaymentService {
     */
 
     //! this object is only for testing so I make it local object
-    const ticketConstruction = new TicketConstruction();
-    await ticketConstruction.composeTicket(order, "other");
+    await this.ticketConstruction.composeTicket(order, "other");
 
     // return { billLink: "https://random.site", token: "asfjotuasdf0127491" };
     return { billLink: "", token: "" };
