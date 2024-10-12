@@ -101,6 +101,7 @@ export class EmailHelper {
         } catch (error: any) {
           console.error("Error saving mail:", error);
           logErrorToFile(emailBody.to, error)
+          throw error
         } finally {
         }
       }
