@@ -38,6 +38,7 @@ export class TicketConstruction {
     },
     paymentType: string
   ) {
+    const uniqueEmail: string[] = []
     for (let i = 0; i < order.orderDetails?.length; i++) {
       const id = uuidv4();
       const orderDetail = order.orderDetails[i];
@@ -64,27 +65,30 @@ export class TicketConstruction {
         orderDetail.id
       );
 
-      const clientUrl = `${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}`;
-      const emailBody = {
-        from: config.config().KARTJIS_MAIL,
-        to: orderDetail.email,
-        subject: `E-Kartjis [${order.Event?.name}] - ${orderDetail.name}`,
-        // html: `<a href="${clientUrl}">${clientUrl}</a>`,
-        html: pug.compileFile(
-          path.join(__dirname, "..", "..", "..", "views/email.pug")
-        )({
-          name: orderDetail.name,
-          ticketName: order.Event?.name,
-          orderNumber: order.id,
-          orderDate: new Date(order.createdAt),
-          paymentMethod: paymentType,
-          redirectLink: clientUrl,
-        }),
-        text: "",
-      };
-      setTimeout(() => {
-        this.emailHelper.sendEmail(emailBody);
-      }, 5 * 60 * 1000);
+      if (!uniqueEmail.find(e => e == orderDetail.email)) {
+        const clientUrl = `${process.env.KARTJIS_URL}/my-ticket/info/${orderDetail.id}`;
+        const emailBody = {
+          from: config.config().KARTJIS_MAIL,
+          to: orderDetail.email,
+          subject: `E-Kartjis ${order.Event?.name} - ${orderDetail.name}`,
+          // html: `<a href="${clientUrl}">${clientUrl}</a>`,
+          html: pug.compileFile(
+            path.join(__dirname, "..", "..", "..", "views/email.pug")
+          )({
+            name: orderDetail.name,
+            ticketName: order.Event?.name,
+            orderNumber: order.id,
+            orderDate: new Date(order.createdAt),
+            paymentMethod: paymentType,
+            redirectLink: clientUrl,
+          }),
+          text: "",
+        };
+        setTimeout(() => {
+          this.emailHelper.sendEmail(emailBody);
+        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        uniqueEmail.push(orderDetail.email)
+      }
     }
   }
 }
