@@ -15,7 +15,7 @@ export class OrderDetailRouter {
   register() {
     // * /orders
     this.router
-      .route(this.path + '/:orderDetailId')
+      .route(this.path + '/:orderDetailId') 
       .get(this.handler.getOrderDetailDetail);
 
     this.router

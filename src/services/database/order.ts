@@ -15,6 +15,23 @@ export class OrderService {
         this.model = new Order();
     }
 
+    async composeTicketPendingOrder(orderId: string) {
+        const order = await this.model.changePaymentStatusById(orderId, true);
+
+        const ticketConstruction = new TicketConstruction();
+
+        if (order) {
+            await ticketConstruction.composeTicket(order, 'qris');
+
+            //   for (let i = 0; i < order.orderDetails.length; i++) {
+            //     await this.ticketModel.reduceTicketBasedOnQuantityBought(
+            //       order.orderDetails[i].ticketId,
+            //       1
+            //     );
+            //   }
+        }
+    }
+
     async sendEmailToOder(orderId: string) {
         const order = await this.model.getOrderById(orderId);
 

@@ -98,6 +98,7 @@ export const OrderDetailDetailMapper = (
     hash: data.TicketVerification?.hash,
     barcodeURI: `${process.env.HOST}:${process.env.PORT}/api/ticket-verifications/${data.TicketVerification?.hash}`,
     ticketName: data.Ticket?.name,
+    email: data.email,
     schedules,
     orderDetails,
   } as IOrderDetailDetailDTO;

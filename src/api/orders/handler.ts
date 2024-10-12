@@ -19,6 +19,21 @@ export class OrderHandler {
     this.putOrder = this.putOrder.bind(this);
     this.getOrderOrderDetails = this.getOrderOrderDetails.bind(this);
     this.postEmailOrders = this.postEmailOrders.bind(this)
+    this.putEmailOrderPending = this.putEmailOrderPending.bind(this)
+  }
+
+  async putEmailOrderPending(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {orderId}  = req.params
+
+      await this.orderService.composeTicketPendingOrder(orderId)
+
+      return res
+        .status(200)
+        .json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE, "successfully compose email for pending order"));
+    } catch (error) {
+      return next(error)
+    }
   }
 
   async postEmailOrders(req: Request, res: Response, next: NextFunction) {
