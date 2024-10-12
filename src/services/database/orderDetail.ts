@@ -29,8 +29,8 @@ export class OrderDetailService {
     });
   }
 
-  async getOrderDetails(eventId: string, page?: number) {
-    return this.model.getOrderDetails(eventId, page);
+  async getOrderDetails(eventId: string, page?: number, sort?: string) {
+    return this.model.getOrderDetails(eventId, page, sort);
   }
 
   async getOfflineTickets(eventId: string, location: string) {

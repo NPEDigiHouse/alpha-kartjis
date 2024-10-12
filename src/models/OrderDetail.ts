@@ -26,13 +26,18 @@ export class OrderDetail {
     });
   }
 
-  async getOrderDetails(eventId: string, page?: number) {
+  async getOrderDetails(eventId: string, page?: number, sort?: string) {
     return db.orderDetail.findMany({
       where: {
         Order: {
           eventId,
           status: 'SUCCESS',
         },
+      },
+      orderBy: {
+        Order: {
+          createdAt: sort == "asc" ? "asc" : sort == "desc" ? "desc" : "asc"
+        }
       },
       select: {
         location: true,

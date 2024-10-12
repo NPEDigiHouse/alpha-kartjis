@@ -24,8 +24,8 @@ export class EventService {
     return data;
   }
 
-  async getEventByIdV2(eventId: string) {
-    const event = await this.model.getEventById(eventId);
+  async getEventByIdV2(eventId: string, isOffline?: boolean) {
+    const event = await this.model.getEventById(eventId, isOffline);
 
     if (!event) {
       throw new NotFoundError("event's not found");

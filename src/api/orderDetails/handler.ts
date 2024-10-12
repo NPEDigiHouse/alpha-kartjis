@@ -16,12 +16,13 @@ export class OrderDetailHandler {
   async getOrderDetails(req: Request, res: Response, next: NextFunction) {
     try {
       const { eventId } = req.params;
-      const { page } = req.query;
+      const { page,sort } = req.query;
 
       const orderDetails = await this.orderDetailService.getOrderDetails(
         eventId,
         // parseInt(String(page ?? '1')),
         page ? Number(page) : undefined,
+        String(sort)
       );
 
       return res.json(
