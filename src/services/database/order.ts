@@ -53,11 +53,11 @@ export class OrderService {
           text: "",
         };
 
+        uniqueEmail.push(orderDetail.email)
         const emailHelper = new EmailHelper();
         setTimeout(() => {
-          emailHelper.sendEmail(emailBody);
+          emailHelper.sendEmail(emailBody, orderDetail.orderId);
         }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
-        uniqueEmail.push(orderDetail.email)
       }
 
     }

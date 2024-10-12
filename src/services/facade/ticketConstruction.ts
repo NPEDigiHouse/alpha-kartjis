@@ -84,10 +84,10 @@ export class TicketConstruction {
           }),
           text: "",
         };
-        setTimeout(() => {
-          this.emailHelper.sendEmail(emailBody);
-        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
         uniqueEmail.push(orderDetail.email)
+        setTimeout(() => {
+          this.emailHelper.sendEmail(emailBody, orderDetail.orderId);
+        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
       }
     }
   }
