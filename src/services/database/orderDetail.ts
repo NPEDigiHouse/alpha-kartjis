@@ -1,7 +1,7 @@
-import { BadRequestError } from "../../exceptions/BadRequestError";
-import { NotFoundError } from "../../exceptions/NotFoundError";
-import { OrderDetail } from "../../models/OrderDetail";
-import { OrderDetailDetailMapper } from "../../utils/dto/orderDetail";
+import { BadRequestError } from '../../exceptions/BadRequestError';
+import { NotFoundError } from '../../exceptions/NotFoundError';
+import { OrderDetail } from '../../models/OrderDetail';
+import { OrderDetailDetailMapper } from '../../utils/dto/orderDetail';
 
 export class OrderDetailService {
   private model: OrderDetail;
@@ -17,10 +17,10 @@ export class OrderDetailService {
       throw new NotFoundError("orderDetail's not found");
     }
 
-    if (orderDetail[0]?.Order?.status !== "SUCCESS") {
+    if (orderDetail[0]?.Order?.status !== 'SUCCESS') {
       throw new BadRequestError(
         "order hasn't been verified, the status is " +
-          orderDetail[0]?.Order?.status
+          orderDetail[0]?.Order?.status,
       );
     }
 
@@ -33,6 +33,10 @@ export class OrderDetailService {
     return this.model.getOrderDetails(eventId, page);
   }
 
+  async getOfflineTickets(eventId: string, location: string) {
+    return this.model.getOfflineTicketData(eventId, location);
+  }
+
   async getOrderDetailDetail(orderDetailId: string) {
     const orderDetail = await this.model.getOrderDetailById(orderDetailId);
 
@@ -40,9 +44,10 @@ export class OrderDetailService {
       throw new NotFoundError("orderDetail's not found");
     }
 
-    if (orderDetail.Order?.status !== "SUCCESS") {
+    if (orderDetail.Order?.status !== 'SUCCESS') {
       throw new BadRequestError(
-        "order hasn't been verified, the status is " + orderDetail.Order?.status
+        "order hasn't been verified, the status is " +
+          orderDetail.Order?.status,
       );
     }
 
