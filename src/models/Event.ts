@@ -81,7 +81,7 @@ export class Event {
         }
     }
 
-    async getEventById(eventId: string) {
+    async getEventById(eventId: string, isOffline?: boolean) {
         return await db.event.findUnique({
             where: { id: eventId },
             include: {
@@ -92,6 +92,9 @@ export class Event {
                             include: {
                                 Order: true,
                             },
+                            where: {
+                                location: isOffline ? null : undefined
+                            }
                         },
                     },
                     // where: {

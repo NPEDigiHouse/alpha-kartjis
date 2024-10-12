@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { EventService } from "../../services/database/event";
 import { constants, createResponse } from "../../utils";
+import { bool } from "joi";
 
 export class StatsHandler {
   private eventService: EventService;
@@ -14,9 +15,10 @@ export class StatsHandler {
 
   async getEventStats(req: Request, res: Response, next: NextFunction) {
     const { eventId } = req.params;
+    const {isOffline} = req.query
 
     try {
-      const event = await this.eventService.getEventByIdV2(eventId);
+      const event = await this.eventService.getEventByIdV2(eventId, Boolean(isOffline));
 
       let net = 0;
       let sold = 0;
