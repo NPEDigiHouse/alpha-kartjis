@@ -16,14 +16,19 @@ export class OrderDetailHandler {
     const { eventId } = req.params;
     const { page } = req.query;
 
-    const orderDetails = await this.orderDetailService.getOrderDetails(
-      eventId,
-      parseInt(String(page ?? "1"))
-    );
-
-    return res.json(
-      createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails)
-    );
+    try {
+      const orderDetails = await this.orderDetailService.getOrderDetails(
+        eventId,
+        parseInt(String(page ?? "1"))
+      );
+  
+      return res.json(
+        createResponse(constants.SUCCESS_RESPONSE_MESSAGE, orderDetails)
+      );
+      
+    } catch (error) {
+      return next(error)
+    }
   }
 
   async getOrderDetailDetail(req: Request, res: Response, next: NextFunction) {
