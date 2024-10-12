@@ -29,32 +29,37 @@ export class OrderService {
     // const ticketConstruction = new TicketConstruction();
     // await ticketConstruction.composeTicket(order, "other");
 
+    const uniqueEmail: string[] = []
     for (let i = 0; i < order.orderDetails.length; i++) {
       const orderDetail = order.orderDetails[i];
 
-      const clientUrl = `https://kartjis.id/my-ticket/info/${orderDetail.id}`;
-      const emailBody = {
-        from: config.config().KARTJIS_MAIL,
-        to: orderDetail.email,
-        subject: `E-Tiket ${order.Event?.name} - ${orderDetail.name}`,
-        // html: `<a href="${clientUrl}">${clientUrl}</a>`,
-        html: pug.compileFile(
-          path.join(__dirname, "..", "..", "..", "views/email.pug")
-        )({
-          name: orderDetail.name,
-          ticketName: orderDetail.Ticket?.name,
-          orderNumber: order.id,
-          orderDate: new Date(order.createdAt),
-          paymentMethod: "other",
-          redirectLink: clientUrl,
-        }),
-        text: "",
-      };
+      if (!uniqueEmail.find(e => e == orderDetail.email)) {
+        const clientUrl = `https://kartjis.id/my-ticket/info/${orderDetail.id}`;
+        const emailBody = {
+          from: config.config().KARTJIS_MAIL,
+          to: orderDetail.email,
+          subject: `E-Tiket ${order.Event?.name} - ${orderDetail.name}`,
+          // html: `<a href="${clientUrl}">${clientUrl}</a>`,
+          html: pug.compileFile(
+            path.join(__dirname, "..", "..", "..", "views/email.pug")
+          )({
+            name: orderDetail.name,
+            ticketName: orderDetail.Ticket?.name,
+            orderNumber: order.id,
+            orderDate: new Date(order.createdAt),
+            paymentMethod: "other",
+            redirectLink: clientUrl,
+          }),
+          text: "",
+        };
 
-      const emailHelper = new EmailHelper();
-      setTimeout(() => {
-        emailHelper.sendEmail(emailBody);
-      }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        const emailHelper = new EmailHelper();
+        setTimeout(() => {
+          emailHelper.sendEmail(emailBody);
+        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        uniqueEmail.push(orderDetail.email)
+      }
+
     }
     // order?.orderDetails.forEach((od) => {
     //   const clientUrl = `https://kartjis.id/my-ticket/info/${orderDetail.id}`;
