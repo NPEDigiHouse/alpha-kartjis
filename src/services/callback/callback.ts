@@ -42,7 +42,7 @@ export class CallbackService {
             );
           }
         }
-        throw new BadRequestError("payment contains fraud content");
+        // throw new BadRequestError("payment contains fraud content");
       }
     }
 
@@ -74,7 +74,7 @@ export class CallbackService {
           );
         }
       }
-      throw new BadRequestError("transaction is not authentic");
+      // throw new BadRequestError("transaction is not authentic");
     }
 
     if (

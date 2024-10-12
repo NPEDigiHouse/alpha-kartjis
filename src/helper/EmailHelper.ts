@@ -84,23 +84,19 @@ export class EmailHelper {
         // });
     }
 
-    sendEmail(emailBody: IEmailBody) {
+    sendEmail(emailBody: IEmailBody, orderId?: string | null) {
         // Send the email using the transporter
         this.transporter.sendMail(emailBody, async (error, info) => {
             if (error) {
                 console.error('Error sending email:', error);
                 logErrorToFile(emailBody.to, error);
-                fetch('https://ntfy.sh/mytopic', {
-                    method: 'POST', // PUT works too
-                    body: 'Backup successful 😀',
-                });
-                const failedMessage = `Failed send email to ${emailBody.to}, ${emailBody.subject}. Error: ${error}`;
+                const failedMessage = `Failed send email to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`;
                 await axios.post(
                     'https://ntfy.sh/failed-kartjis-mail',
                     failedMessage
                 );
             } else {
-                const successMessage = `Successfully send email to ${emailBody.to}, ${emailBody.subject}`;
+                const successMessage = `Successfully send email to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`;
                 await axios.post(
                     'https://ntfy.sh/successfull-kartjis-mail',
                     successMessage
