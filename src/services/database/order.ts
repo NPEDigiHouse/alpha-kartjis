@@ -81,7 +81,7 @@ export class OrderService {
         
         setTimeout(() => {
           this.emailHelper.sendEmail(emailBody, orderDetail.orderId);
-        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        }, (Math.floor(Math.random() * (3 - 1 + 1)) + 1) * 60 * 1000);
       }
 
     }
