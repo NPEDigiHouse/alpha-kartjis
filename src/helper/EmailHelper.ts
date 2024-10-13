@@ -23,7 +23,7 @@ interface IEmailBody {
 }
 
 // Function to log errors into a file
-function logErrorToFile(email: string, error: Error): void {
+function logErrorToFile(email: string, error: any): void {
   const logFilePath = path.join(__dirname, '..', '..', 'email_errors.log');
   const logMessage = `[${new Date().toISOString()}] Error sending email to: ${email}\nError: ${error.message}\n\n`;
 
@@ -51,8 +51,8 @@ export class EmailHelper {
     //     pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
     //   },
     // });
-    
-    
+
+
     // ** ini buat hostinger
     this.transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
@@ -61,10 +61,16 @@ export class EmailHelper {
         user: config.config().KARTJIS_MAIL, // Your Gmail email address
         pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
       },
+      greetingTimeout: 1000 * 60 * 2,
+      maxConnections: 3,
+      maxMessages: 100,
+      rateDelta: 1,
+      rateLimit: 10,
+      connectionTimeout: 1000 * 60 * 2,
       pool: true,
-      greetingTimeout: 1000 * 60
+
     });
-    
+
     this.imapClient = new ImapFlow({
       host: 'imap.hostinger.com', // Your IMAP server
       port: 993, // IMAP port (usually 993 for TLS)
@@ -74,41 +80,64 @@ export class EmailHelper {
         pass: config.config().KARTJIS_PASSWORD ?? "", // Your Gmail email password
       },
     });
-    
+
     this.imapClient.connect().then(v => console.log(v))
   }
-  
-  sendEmail(emailBody: IEmailBody, orderId?: string | null) {
+
+  async sendEmail(emailBody: IEmailBody, orderId?: string | null) {
     // Send the email using the transporter
-    this.transporter.sendMail(emailBody, async (error, info) => {
-      if (error) {
-        console.error("Error sending email:", error);
-        logErrorToFile(emailBody.to, error)
-        const failedMessage = `Failed send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`
-        await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
-      } 
-      // else {
-        //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-        //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
-        // }
-        // ** ini buat hostinger
-        else {
-          try {
-          if (!this.imapClient.usable) {
-            await this.imapClient.connect()
-          }
-          const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
-          // Append the email to the "Sent" folder
-          await this.imapClient.append('Sent', message);
-          console.log("Email sent:", info.response);
-          const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-          await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
-        } catch (error: any) {
-          console.error("Error saving mail:", error);
-          logErrorToFile(emailBody.to, error)
-        } finally {
+    for (let i = 0; i < 3; i++) {
+      try {
+        const info = await this.transporter.sendMail(emailBody)
+
+        if (!this.imapClient.usable) {
+          await this.imapClient.connect()
         }
+        const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
+        // Append the email to the "Sent" folder
+        await this.imapClient.append('Sent', message);
+        console.log("Email sent:", info.response);
+        const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+        logErrorToFile(emailBody.to, successMessage)
+        // await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+        return
+      } catch (error: any) {
+        console.error("Error sending email:", error);
+        const failedMessage = `Failed send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`
+        logErrorToFile(emailBody.to, failedMessage)
+        logErrorToFile(emailBody.to, error)
+        // await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
       }
-    });
+    }
+    // this.transporter.sendMail(emailBody, async (error, info) => {
+    //   if (error) {
+    // console.error("Error sending email:", error);
+    // logErrorToFile(emailBody.to, error)
+    // const failedMessage = `Failed send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`
+    // await axios.post("https://ntfy.sh/failed-kartjis-mail", failedMessage)
+    // }
+    // else {
+    //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+    //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+    // }
+    // ** ini buat hostinger
+    // else {
+    //   try {
+    //   if (!this.imapClient.usable) {
+    //     await this.imapClient.connect()
+    //   }
+    //   const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
+    //   // Append the email to the "Sent" folder
+    //   await this.imapClient.append('Sent', message);
+    //   console.log("Email sent:", info.response);
+    //   const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+    //   await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
+    // } catch (error: any) {
+    //   console.error("Error saving mail:", error);
+    //   logErrorToFile(emailBody.to, error)
+    // } finally {
+    // }
   }
+  // });
 }
+// }
