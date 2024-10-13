@@ -79,8 +79,8 @@ export class EmailHelper {
       greetingTimeout: 1000 * 60 * 2,
       maxConnections: 3,
       maxMessages: 100,
-      rateDelta: 1000 * 60,
-      rateLimit: 100,
+      rateDelta: 1000,
+      rateLimit: 1,
       connectionTimeout: 1000 * 60 * 2,
       pool: true,
 
