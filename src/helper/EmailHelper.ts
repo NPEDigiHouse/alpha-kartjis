@@ -61,6 +61,8 @@ export class EmailHelper {
         user: config.config().KARTJIS_MAIL, // Your Gmail email address
         pass: config.config().KARTJIS_PASSWORD, // Your Gmail email password
       },
+      pool: true,
+      greetingTimeout: 1000 * 60
     });
     
     this.imapClient = new ImapFlow({
