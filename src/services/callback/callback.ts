@@ -8,9 +8,24 @@ import { Ticket } from "../../models/Ticket";
 import amqlib from "amqplib";
 import dotenv from "dotenv";
 import { EmailHelper } from "../../helper/EmailHelper";
+import path from "path";
+import fs from 'fs';
 
 dotenv.config();
 
+function logSuccessToFile(message: any): void {
+  const logFilePath = path.join(__dirname, '..', '..', 'transaction_error.log');
+  const logMessage = `[${new Date().toISOString()}] ${message}\n\n`;
+
+  // Append the error log to the file
+  fs.appendFile(logFilePath, logMessage, (err) => {
+    if (err) {
+      console.error("Failed to write to log file:", err);
+    } else {
+      console.log("Error logged to file.");
+    }
+  });
+}
 export class CallbackService {
   orderModel: Order;
   ticketVerificationModel: TicketVerification;
@@ -24,9 +39,12 @@ export class CallbackService {
     this.ticketModel = new Ticket();
   }
 
+  // Function to log errors into a file
+
   async verifyPayment(data: any) {
     if (data.fraud_status) {
       if (data.fraud_status !== "accept") {
+        logSuccessToFile(`${data.order_id} is fraud`)
         const order = await this.orderModel.changePaymentStatusById(
           data.order_id,
           false
@@ -56,6 +74,7 @@ export class CallbackService {
     );
 
     if (challengedSignatureKey !== data.signature_key) {
+      logSuccessToFile(`${data.order_id} is not authentic`)
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,
         false
@@ -79,6 +98,7 @@ export class CallbackService {
       data.transaction_status === "capture" ||
       data.transaction_status === "settlement"
     ) {
+      logSuccessToFile(`${data.order_id} is successfull`)
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,
         true,
@@ -102,6 +122,7 @@ export class CallbackService {
       data.transaction_status === "refund" ||
       data.transaction_status === "partial_refund"
     ) {
+      logSuccessToFile(`${data.order_id} is failed`)
       const order = await this.orderModel.changePaymentStatusById(
         data.order_id,
         false

@@ -83,7 +83,6 @@ export class EmailHelper {
       rateLimit: 1,
       connectionTimeout: 1000 * 60 * 2,
       pool: true,
-
     });
 
     this.imapClient = new ImapFlow({
@@ -103,19 +102,22 @@ export class EmailHelper {
     // Send the email using the transporter
     for (let i = 0; i < 3; i++) {
       try {
-        const info = await this.transporter.sendMail(emailBody)
+        if (this.transporter.isIdle()) {
+          const info = await this.transporter.sendMail(emailBody)
 
-        if (!this.imapClient.usable) {
-          await this.imapClient.connect()
+          if (!this.imapClient.usable) {
+            await this.imapClient.connect()
+          }
+
+          const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
+          // Append the email to the "Sent" folder
+          await this.imapClient.append('Sent', message);
+          console.log("Email sent:", info.response);
+          const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
+          logSuccessToFile(successMessage)
+          // await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
         }
-        const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
-        // Append the email to the "Sent" folder
-        await this.imapClient.append('Sent', message);
-        console.log("Email sent:", info.response);
-        const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-        logSuccessToFile(successMessage)
-        // await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
-        return
+        break
       } catch (error: any) {
         console.error("Error sending email:", error);
         const failedMessage = `Failed send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject}. Error: ${error} with orderId ${orderId}`

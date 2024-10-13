@@ -15,7 +15,6 @@ export class OrderRouter {
   }
 
   register() {
-
     // * /orders
     // * PUT method is just for testing only
     this.router
