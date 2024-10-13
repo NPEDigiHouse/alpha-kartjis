@@ -80,7 +80,7 @@ export class EmailHelper {
       maxConnections: 3,
       maxMessages: 100,
       rateDelta: 1,
-      rateLimit: 10,
+      rateLimit: 5,
       connectionTimeout: 1000 * 60 * 2,
       pool: true,
 
