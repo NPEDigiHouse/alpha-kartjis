@@ -37,6 +37,21 @@ function logErrorToFile(email: string, error: any): void {
   });
 }
 
+// Function to log errors into a file
+function logSuccessToFile(message: any): void {
+  const logFilePath = path.join(__dirname, '..', '..', 'email_success.log');
+  const logMessage = `[${new Date().toISOString()}] ${message}\n\n`;
+
+  // Append the error log to the file
+  fs.appendFile(logFilePath, logMessage, (err) => {
+    if (err) {
+      console.error("Failed to write to log file:", err);
+    } else {
+      console.log("Error logged to file.");
+    }
+  });
+}
+
 export class EmailHelper {
   transporter: nodemailer.Transporter;
   // ** ini buat hostinger
@@ -98,7 +113,7 @@ export class EmailHelper {
         await this.imapClient.append('Sent', message);
         console.log("Email sent:", info.response);
         const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
-        logErrorToFile(emailBody.to, successMessage)
+        logSuccessToFile(successMessage)
         // await axios.post("https://ntfy.sh/successfull-kartjis-mail", successMessage)
         return
       } catch (error: any) {
