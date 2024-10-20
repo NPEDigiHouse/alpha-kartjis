@@ -52,6 +52,10 @@ export class TicketPurchasemmentService {
       customer?.id
     );
 
+    if (!order) {
+      throw new BadRequestError("try again to purchase");
+    }
+
     // * as much as possible trying to use bulking insert native to ORM
     // * this will create uuids based on the number of tickets purchased (duplicate ticket is count)
     const ids = [];
