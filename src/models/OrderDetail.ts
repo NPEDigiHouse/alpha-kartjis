@@ -29,6 +29,9 @@ export class OrderDetail {
   async getOrderDetails(eventId: string, page?: number, sort?: string) {
     return db.orderDetail.findMany({
       where: {
+        NOT: {
+          location: "666"
+        },
         Order: {
           eventId,
           status: 'SUCCESS',
