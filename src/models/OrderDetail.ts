@@ -27,11 +27,24 @@ export class OrderDetail {
   }
 
   async getOrderDetails(eventId: string, page?: number, sort?: string) {
+    const excludedIds = await db.orderDetail.findMany({
+      where: {
+        location: '666',
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // Extract the IDs into an array
+    const excludedIdsArray = excludedIds.map((detail: any) => detail.id);
+
     return db.orderDetail.findMany({
       where: {
-        NOT: {
-          location: "666"
+        id: {
+          notIn: excludedIdsArray,
         },
+
         Order: {
           eventId,
           status: 'SUCCESS',
@@ -39,8 +52,8 @@ export class OrderDetail {
       },
       orderBy: {
         Order: {
-          createdAt: sort == "asc" ? "asc" : sort == "desc" ? "desc" : "asc"
-        }
+          createdAt: sort == 'asc' ? 'asc' : sort == 'desc' ? 'desc' : 'asc',
+        },
       },
       select: {
         location: true,
@@ -62,12 +75,43 @@ export class OrderDetail {
         Ticket: {
           select: {
             name: true,
+            price: true,
           },
         },
       },
       // take: 20,
       // skip: (page - 1) * 20,
       ...(page ? { take: 20, skip: (page - 1) * 20 } : {}),
+    });
+  }
+
+  async getTotalTicketPriceByType(eventId: string) {
+    const tickets = await db.orderDetail.findMany({
+      where: {
+        Order: {
+          eventId,
+          status: 'SUCCESS',
+        },
+        NOT: {
+          location: null,
+        },
+      },
+      select: {
+        Order: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            paymentType: true,
+          },
+        },
+        Ticket: {
+          select: {
+            name: true,
+            price: true,
+          },
+        },
+      },
     });
   }
 
