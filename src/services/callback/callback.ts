@@ -61,6 +61,7 @@ export class CallbackService {
             );
           }
         }
+        return
         // throw new BadRequestError("payment contains fraud content");
       }
     }
@@ -91,6 +92,7 @@ export class CallbackService {
           );
         }
       }
+      return
       // throw new BadRequestError("transaction is not authentic");
     }
 
