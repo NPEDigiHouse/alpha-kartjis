@@ -26,7 +26,7 @@ export class CallbackHandler {
         throw new InternalServerError("kesalahan server");
       }
 
-      await this.callbackService.verifyPayment(data);
+      await this.callbackService.verifyPaymentCallbackKafka(data);
 
       return res.json(createResponse(constants.SUCCESS_RESPONSE_MESSAGE));
     } catch (error) {

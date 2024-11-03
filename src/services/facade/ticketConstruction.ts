@@ -1,4 +1,3 @@
-import { Event, Order, OrderDetail, Ticket } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { hashData } from "../../utils";
 import { TicketVerification } from "../../models/TicketVerification";
@@ -7,6 +6,7 @@ import dotenv from "dotenv";
 import pug from "pug";
 import path from "path";
 import { config } from "../../config";
+import { Order } from "../../models/Order";
 
 dotenv.config();
 
@@ -25,19 +25,24 @@ interface IOrderDetail {
 export class TicketConstruction {
   ticketVerificationModel: TicketVerification;
   emailHelper: EmailHelper;
+  orderModel: Order
 
   constructor(emailHelper: EmailHelper) {
     this.ticketVerificationModel = new TicketVerification();
     this.emailHelper = emailHelper;
+    this.orderModel = new Order()
   }
 
   async composeTicket(
-    order: Order & {
-      Event: Event | null;
-      orderDetails: (OrderDetail & { Ticket: Ticket | null })[] | [];
-    },
+    orderId: string,
     paymentType: string
   ) {
+    const order = await this.orderModel.getOrderById(orderId)
+
+    if (!order) {
+      return
+    }
+
     const uniqueEmail: string[] = []
     for (let i = 0; i < order.orderDetails?.length; i++) {
       const id = uuidv4();
@@ -85,9 +90,7 @@ export class TicketConstruction {
           text: "",
         };
         uniqueEmail.push(orderDetail.email)
-        setTimeout(() => {
-          this.emailHelper.sendEmail(emailBody, orderDetail.orderId);
-        }, (Math.floor(Math.random() * (5 - 1 + 1)) + 1) * 60 * 1000);
+        this.emailHelper.sendEmail(emailBody, orderDetail.orderId);
       }
     }
   }

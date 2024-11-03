@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import { config } from "../config";
 import fs from 'fs';
 import path from 'path';
-import { ImapFlow } from 'imapflow';
+// import { ImapFlow } from 'imapflow';
 import axios from "axios";
 
 dotenv.config();
@@ -55,7 +55,7 @@ function logSuccessToFile(message: any): void {
 export class EmailHelper {
   transporter: nodemailer.Transporter;
   // ** ini buat hostinger
-  imapClient: ImapFlow
+  // imapClient: ImapFlow
 
   constructor() {
     // Create a transport object using SMTP for Gmail
@@ -85,17 +85,17 @@ export class EmailHelper {
       pool: true,
     });
 
-    this.imapClient = new ImapFlow({
-      host: 'imap.hostinger.com', // Your IMAP server
-      port: 993, // IMAP port (usually 993 for TLS)
-      secure: true,
-      auth: {
-        user: config.config().KARTJIS_MAIL ?? "", // Your Gmail email address
-        pass: config.config().KARTJIS_PASSWORD ?? "", // Your Gmail email password
-      },
-    });
+    // this.imapClient = new ImapFlow({
+    //   host: 'imap.hostinger.com', // Your IMAP server
+    //   port: 993, // IMAP port (usually 993 for TLS)
+    //   secure: true,
+    //   auth: {
+    //     user: config.config().KARTJIS_MAIL ?? "", // Your Gmail email address
+    //     pass: config.config().KARTJIS_PASSWORD ?? "", // Your Gmail email password
+    //   },
+    // });
 
-    this.imapClient.connect().then(v => console.log(v))
+    // this.imapClient.connect().then(v => console.log(v))
   }
 
   async sendEmail(emailBody: IEmailBody, orderId?: string | null) {
@@ -105,13 +105,13 @@ export class EmailHelper {
         if (this.transporter.isIdle()) {
           const info = await this.transporter.sendMail(emailBody)
 
-          if (!this.imapClient.usable) {
-            await this.imapClient.connect()
-          }
+          // if (!this.imapClient.usable) {
+          //   await this.imapClient.connect()
+          // }
 
           const message = `From: ${emailBody.from}\r\nTo: ${emailBody.to}\r\nSubject: ${emailBody.subject}\r\n\r\n${emailBody.html}`;
           // Append the email to the "Sent" folder
-          await this.imapClient.append('Sent', message);
+          // await this.imapClient.append('Sent', message);
           console.log("Email sent:", info.response);
           const successMessage = `Successfully send email from ${emailBody.from} to ${emailBody.to}, ${emailBody.subject} with orderId ${orderId}`
           logSuccessToFile(successMessage)

@@ -16,10 +16,10 @@ class Config {
       };
     } else {
       return {
-        MIDTRANS_SERVER_KEY: process.env.MIDTRANS_SERVER_KEY,
-        MIDTRANS_SNAP_URL: process.env.MIDTRANS_SNAP_URL,
-        KARTJIS_MAIL: process.env.KARTJIS_MAIL,
-        KARTJIS_PASSWORD: process.env.KARTJIS_PASSWORD,
+        MIDTRANS_SERVER_KEY: process.env.MIDTRANS_SERVER_KEY_SANDBOX,
+        MIDTRANS_SNAP_URL: process.env.MIDTRANS_SNAP_URL_SANDBOX,
+        KARTJIS_MAIL: process.env.KARTJIS_MAIL_PRODUCTION,
+        KARTJIS_PASSWORD: process.env.KARTJIS_PASSWORD_PRODUCTION,
         MIDTRANS_API_URL: process.env.MIDTRANS_API_URL,
       };
     }
