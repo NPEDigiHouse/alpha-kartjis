@@ -28,7 +28,7 @@ export class OrderService {
     
 
     if (order) {
-      await this.ticketConstruction.composeTicket(order, "qris");
+      await this.ticketConstruction.composeTicket(orderId, "qris");
 
       //   for (let i = 0; i < order.orderDetails.length; i++) {
       //     await this.ticketModel.reduceTicketBasedOnQuantityBought(

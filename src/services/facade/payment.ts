@@ -86,7 +86,7 @@ export class PaymentService {
     */
 
     //! this object is only for testing so I make it local object
-    await this.ticketConstruction.composeTicket(order, "other");
+    await this.ticketConstruction.composeTicket(orderId, "other");
 
     // return { billLink: "https://random.site", token: "asfjotuasdf0127491" };
     return { billLink: "", token: "" };

@@ -119,7 +119,7 @@ export class CallbackService {
       );
 
       if (order) {
-        this.ticketConstruction.composeTicket(order, data.payment_type);
+        this.ticketConstruction.composeTicket(data.order_id, data.payment_type);
 
         //   for (let i = 0; i < order.orderDetails.length; i++) {
         //     await this.ticketModel.reduceTicketBasedOnQuantityBought(
